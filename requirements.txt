@@ -1,0 +1,5 @@
+# pip install -r requirements.txt
+
+Django==5.2.9
+django-restframework==0.0.1
+pillow==12.0.0
