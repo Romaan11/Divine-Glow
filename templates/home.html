@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+    <!-- Modal Search Start -->
+    {% include 'search.html' %}
+    <!-- Modal Search End -->
+
+
+
+    <!-- Carousel Start -->
+    {% include 'intro.html' %}
+    <!-- Carousel End -->
+
+
+    <!-- Services Start -->
+    {% include 'services.html' %}
+    <!-- Services End -->
+
+    
+    <!-- About Start -->
+    {% include 'about.html' %}
+
+    <!-- Modal Video -->
+    {% comment %} <div class="modal fade" id="videoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content rounded-0">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Youtube Video</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- 16:9 aspect ratio -->
+                    <div class="ratio ratio-16x9">
+                        <iframe class="embed-responsive-item" src="" id="video" allowfullscreen allowscriptaccess="always"
+                            allow="autoplay"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> {% endcomment %}
+    <!-- About End -->
+
+
+    <!-- Appointment Start -->
+        {% include 'appointment.html' %}
+    <!-- Appointment End -->
+
+
+    <!-- Gallery Start -->
+    {% include 'gallery.html' %}
+    <!-- gallery End -->
+
+
+    <!-- Pricing Start -->
+    {% include 'pricing.html' %}
+    <!-- Pricing End -->
+
+
+    <!-- Team Start -->
+    {% include 'team.html' %}
+    <!-- Team End -->
+
+
+    <!-- Testimonial Start -->
+    {% include 'testimonials.html' %}
+    <!-- Testimonial End -->
+
+
+    <!-- Contact Start -->
+    {% include 'contact.html' %}
+    <!-- Contact End -->
+
+{% endblock content %}
