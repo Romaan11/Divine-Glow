@@ -1,26 +1,26 @@
-{% extends "base.html" %}
+{% extends "divine/base.html" %}
 {% load static %}
 
 {% block content %}
 
     <!-- Modal Search Start -->
-    {% include 'search.html' %}
+    {% include 'divine/home/search.html' %}
     <!-- Modal Search End -->
 
 
 
     <!-- Carousel Start -->
-    {% include 'intro.html' %}
+    {% include 'divine/home/intro.html' %}
     <!-- Carousel End -->
 
 
     <!-- Services Start -->
-    {% include 'services.html' %}
+    {% include 'divine/home/services.html' %}
     <!-- Services End -->
 
     
     <!-- About Start -->
-    {% include 'about.html' %}
+    {% include 'divine/home/about.html' %}
 
     <!-- Modal Video -->
     {% comment %} <div class="modal fade" id="videoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -44,32 +44,32 @@
 
 
     <!-- Appointment Start -->
-        {% include 'appointment.html' %}
+        {% include 'divine/home/appointment.html' %}
     <!-- Appointment End -->
 
 
     <!-- Gallery Start -->
-    {% include 'gallery.html' %}
+    {% include 'divine/home/gallery.html' %}
     <!-- gallery End -->
 
 
     <!-- Pricing Start -->
-    {% include 'pricing.html' %}
+    {% include 'divine/home/pricing.html' %}
     <!-- Pricing End -->
 
 
     <!-- Team Start -->
-    {% include 'team.html' %}
+    {% include 'divine/home/team.html' %}
     <!-- Team End -->
 
 
     <!-- Testimonial Start -->
-    {% include 'testimonials.html' %}
+    {% include 'divine/home/testimonials.html' %}
     <!-- Testimonial End -->
 
 
     <!-- Contact Start -->
-    {% include 'contact.html' %}
+    {% include 'divine/home/home_contact.html' %}
     <!-- Contact End -->
 
 {% endblock content %}

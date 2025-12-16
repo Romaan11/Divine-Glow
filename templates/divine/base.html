@@ -10,6 +10,9 @@
         <meta content="" name="keywords">
         <meta content="" name="description">
 
+        <!-- Favicon -->
+        <link href="{% static 'img/favicon.png' %}" rel="icon">
+
         <!-- Google Web Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,7 +20,7 @@
 
         <!-- Icon Font Stylesheet -->
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"/>
-        <link href="https://cdn.js' %}delivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
         <!-- Libraries Stylesheet -->
         <link href="{% static 'lib/animate/animate.min.css' %}" rel="stylesheet">
@@ -41,7 +44,7 @@
         <!-- Spinner End -->
 
         <!-- Navbar start -->
-        {% include 'navbar.html' %}
+        {% include 'divine/navbar.html' %}
         <!-- Navbar End -->
 
         {% block content %}
@@ -52,13 +55,13 @@
 
 
         <!-- Footer Start -->
-        {% include 'footer.html' %}
+        {% include 'divine/footer.html' %}
         <!-- Footer End -->
 
 
 
         <!-- Copyright Start -->
-        {% include 'copyright.html' %}
+        {% include 'divine/copyright.html' %}
         <!-- Copyright End -->
 
 
@@ -69,7 +72,7 @@
         
     <!-- JavaScript Libraries -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    <script src="https://cdn.js' %}delivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{% static 'lib/wow/wow.min.js' %}"></script>
     <script src="{% static 'lib/easing/easing.min.js' %}"></script>
     <script src="{% static 'lib/waypoints/waypoints.min.js' %}"></script>

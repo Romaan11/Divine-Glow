@@ -667,6 +667,90 @@
 
 /*** Footer End ***/
 
+
+/* Newsletter */
+.newsletter-input-wrapper {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border-radius: 50px;
+    padding: 6px;
+}
+
+/* Input */
+.newsletter-input {
+    border: 0;
+    box-shadow: none;
+    border-radius: 50px;
+    padding-left: 16px;
+    flex: 1;
+}
+
+/* Button */
+.newsletter-btn {
+    border-radius: 50px;
+    padding: 8px 18px;
+    white-space: nowrap;
+    background-color: #FF99BB;
+    border-color: #FF99BB;
+    color: #fff;
+    transition: all 0.3s ease;
+}
+
+/* Hover effect */
+.newsletter-btn:hover {
+    background-color: #6f42c1; /* keep same color */
+    border-color: #6f42c1;
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(111, 66, 193, 0.45);
+}
+
+/* Focus (keyboard / click) */
+.newsletter-btn:focus:not(:hover),
+.newsletter-btn:active:not(:hover) {
+    background-color: #FF99BB;
+    border-color: #FF99BB;
+    box-shadow: none
+}
+
+#newsletter_message {
+    display: none;
+    padding: 16px 20px;
+    border-radius: 6px;
+    font-size: 15px;
+    margin-bottom: 14px;
+    transition: all 0.4s ease;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Success & error styles */
+.newsletter-success {
+    background-color: rgba(25, 135, 84, 0.15);
+    border: 1px solid #198754;
+    color: #198754;
+}
+
+.newsletter-error {
+    background-color: rgba(220, 53, 69, 0.15);
+    border: 1px solid #dc3545;
+    color: #dc3545;
+}
+
+/* Fade animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+
+
+
 /*** copyright Start ***/
 .copyright {
     border-top: 1px solid rgba(255, 255, 255, 0.08);
