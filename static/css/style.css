@@ -14,6 +14,7 @@
  }
 /*** Spinner End ***/
 
+/* Back to top */
 .back-to-top {
     position: fixed;
     right: 30px;
@@ -25,6 +26,7 @@
     justify-content: center;
     transition: 0.5s;
     z-index: 99;
+    border: 1px solid rgba(0, 0, 0, 0.4) !important;
 }
 
 /*** Button Start ***/
@@ -394,7 +396,52 @@
     object-fit: cover;
     border-radius: 10px;
 }
+
+.appointment .form-control::placeholder {
+    color: #ffffff !important;
+    opacity: 1;
+}
+
+input.form-control,
+textarea.form-control {
+    color: #ffffff;
+    background-color: transparent;
+    border: 1px solid #ffffff;
+}
+
+.form-select {
+    color: #ffffff !important;
+    background-color: transparent;
+    border: 1px solid #ffffff;
+}
+
+.form-select option {
+    background-color: #3b2a2f;
+    color: #ffffff;
+}
+
+.form-select option:checked,
+.form-select option:hover {
+    background-color: #ff8fb3;
+    color: #ffffff;
+}
+
+input[type="date"] {
+    color: #ffffff;
+    background-color: transparent;
+    border: 1px solid #ffffff;
+}
+
+input[type="date"]::-webkit-datetime-edit {
+    color: #ffffff;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    cursor: pointer;
+}
 /*** Appointment End ***/
+
 
 /*** Counter Start ***/
 .counter-section .counter-item .counter-content {
@@ -748,6 +795,25 @@
     to { opacity: 0; }
 }
 
+/* Popup in Contact */
+.popup-message {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    max-width: 80%;
+    text-align: center;
+    color: white;
+    border-radius: 30px;
+    z-index: 1050; 
+}
+
+.popup-content {
+    font-size: 18px;
+    font-weight: bold;
+}
 
 
 
@@ -757,3 +823,15 @@
     background: var(--bs-dark) !important;
 }
 /*** copyright end ***/
+
+
+
+
+/* Flatpickr - show disabled dates in red */
+.flatpickr-day.flatpickr-disabled,
+.flatpickr-day.flatpickr-disabled:hover {
+    background: #ff4d4d !important;
+    color: #fff !important;
+    border-color: #ff4d4d !important;
+    cursor: not-allowed;
+}

@@ -1,19 +1,54 @@
 from django.shortcuts import render, redirect
-from django.views.generic import TemplateView, View
+from django.views.generic import TemplateView, View, FormView
 from django.contrib import messages
-from divine_app.forms import ContactForm, NewsletterForm    
+from divine_app.forms import AppointmentForm, ContactForm, NewsletterForm    
 from django.http import JsonResponse
+
+from divine_app.models import Appointment
 
 # Create your views here.
 class HomeView(TemplateView):
     template_name = 'divine/home.html'
 
 class AboutView(TemplateView):
-    template_name = 'about.html'
+    template_name = 'divine/about.html'
 
-class ContactView(TemplateView):
-    template_name = 'divine/contact.html'
 
+class AppointmentView(FormView):
+    template_name = 'divine/appointment.html'
+    form_class = AppointmentForm
+    success_url = '/appointment/'
+
+    def form_valid(self, form):
+        form.save()
+        messages.success(
+            self.request,
+            "Successfully reserved appointment."
+        )
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(
+            self.request,
+            "Can't reserve on the given date and time. Please select another."
+        )
+        return super().form_invalid(form)
+
+
+# For already booked slots
+class BookedSlotsView(View):
+    def get(self, request, *args, **kwargs):
+        appointments = Appointment.objects.values(
+            'preferred_date', 'preferred_time'
+        )
+
+        data = {}
+        for appt in appointments:
+            date = appt['preferred_date'].strftime('%Y-%m-%d')
+            time = appt['preferred_time'].strftime('%H:%M')
+            data.setdefault(date, []).append(time)
+
+        return JsonResponse(data)
 
 class ContactView(View):
     template_name = "divine/contact.html"
@@ -33,11 +68,8 @@ class ContactView(View):
             messages.error(
                 request, "Cannot submit your query. Please make sure all fields are valid.",
             )
-            return render(
-                request,
-                self.template_name,
-                {"form": form},
-            )
+            return redirect("contact") 
+            
 
 
 class NewsletterView(View):
