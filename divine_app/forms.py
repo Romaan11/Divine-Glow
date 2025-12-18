@@ -3,6 +3,7 @@ from datetime import time
 from django import forms
 from divine_app.models import Appointment,Contact, Newsletter
 from django.core.exceptions import ValidationError
+import re
 
 class AppointmentForm(forms.ModelForm):
 
@@ -20,7 +21,10 @@ class AppointmentForm(forms.ModelForm):
             }),
             'phone': forms.TextInput(attrs={
                 'class': 'form-control py-3 border-white bg-transparent text-white',
-                'placeholder': 'Phone No.'
+                'placeholder': 'Phone No.',
+                'maxlength': '10',
+                'pattern': '98[0-9]{8}',  
+                'title': 'Phone number must start with 98 and be exactly 10 digits'
             }),
             'preferred_date': forms.DateInput(attrs={
                 'type': 'date',
@@ -31,54 +35,45 @@ class AppointmentForm(forms.ModelForm):
                 'class': 'form-control py-3 border-white bg-transparent text-white'
             }),
             'service': forms.Select(attrs={
-                'class': 'form-select py-3 border-white bg-transparent'
+                'class': 'form-select py-3 border-white bg-transparent',
+                'placeholder': 'Select Service'
             }),
             'message': forms.Textarea(attrs={
                 'class': 'form-control border-white bg-transparent text-white',
                 'rows': 5,
-                'placeholder': 'Write Comments'
+                'placeholder': 'Write your message here...'
             }),
         }
 
-    def clean(self):
-        cleaned_data = super().clean()
-        date = cleaned_data.get("preferred_date")
-        time_value = cleaned_data.get("preferred_time")
+    # Validate phone number
+    def clean_phone(self):
+        phone = self.cleaned_data.get("phone")
 
-        # Validate that the date is not in the past
-        if date and date < timezone.now().date():
+        # Check if the phone number is exactly 10 digits, starts with '98' or '97', and contains only digits
+        if len(phone) != 10 or not phone.startswith(('98', '97')) or not phone.isdigit():
             raise ValidationError(
-                "You cannot select a past date."
+                "Phone number must start with '98' or '97' and be exactly 10 digits long."
             )
-        
-        # Closed on Friday
-        if date and date.weekday() == 4:
-            raise ValidationError("We are closed on Fridays.")
-        
-        # Working hours
-        if time_value:
-            if not (time(9, 0) <= time_value <= time(22, 0)):
-                raise ValidationError(
-                    "Appointments are available between 9:00 AM and 10:00 PM."
-                )
 
-        # Duplicate booking
-        if date and time_value:
-            if Appointment.objects.filter(
-                preferred_date=date,
-                preferred_time=time_value   
-            ).exists():
-                raise ValidationError(
-                    "Can't reserve on the given date and time. Please select another."
-                )
-
-        return cleaned_data
+        return phone
 
 
 class ContactForm(forms.ModelForm):
     class Meta:
         model = Contact
         fields = "__all__"
+
+    # Validate phone number
+    def clean_phone(self):
+        phone = self.cleaned_data.get("phone")
+
+        # Check if the phone number is exactly 10 digits, starts with '98' or '97', and contains only digits
+        if len(phone) != 10 or not phone.startswith(('98', '97')) or not phone.isdigit():
+            raise ValidationError(
+                "Phone number must start with '98' or '97' and be exactly 10 digits long."
+            )
+
+        return phone  
 
 
 class NewsletterForm(forms.ModelForm):

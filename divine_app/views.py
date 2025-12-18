@@ -28,11 +28,12 @@ class AppointmentView(FormView):
         return super().form_valid(form)
 
     def form_invalid(self, form):
-        messages.error(
-            self.request,
-            "Can't reserve on the given date and time. Please select another."
-        )
         return super().form_invalid(form)
+        # messages.error(
+        #     self.request,
+        #     "Can't reserve on the given date and time. Please select another."
+        # )
+        # return super().form_invalid(form)
 
 
 # For already booked slots
