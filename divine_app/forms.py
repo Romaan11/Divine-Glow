@@ -1,7 +1,7 @@
 from django.utils import timezone
 from datetime import time
 from django import forms
-from divine_app.models import Appointment,Contact, Newsletter
+from divine_app.models import Appointment,Contact, Newsletter, Service
 from django.core.exceptions import ValidationError
 import re
 
@@ -28,15 +28,15 @@ class AppointmentForm(forms.ModelForm):
             }),
             'preferred_date': forms.DateInput(attrs={
                 'type': 'date',
-                'class': 'form-control py-3 border-white bg-transparent'
+                'class': 'form-control py-3 border-white bg-transparent',
+                'placeholder': 'Select Date'
             }),
             'preferred_time': forms.TimeInput(attrs={
                 'type': 'time',
-                'class': 'form-control py-3 border-white bg-transparent text-white'
+                'class': 'form-control py-3 border-white bg-transparent text-white',
             }),
             'service': forms.Select(attrs={
                 'class': 'form-select py-3 border-white bg-transparent',
-                'placeholder': 'Select Service'
             }),
             'message': forms.Textarea(attrs={
                 'class': 'form-control border-white bg-transparent text-white',
@@ -44,6 +44,12 @@ class AppointmentForm(forms.ModelForm):
                 'placeholder': 'Write your message here...'
             }),
         }
+
+    def __init__(self, *args, **kwargs):
+        super(AppointmentForm, self).__init__(*args, **kwargs)
+        # Dynamically load services from the database
+        self.fields['service'].queryset = Service.objects.all()    
+        self.fields['service'].empty_label = "Select Service"
 
     # Validate phone number
     def clean_phone(self):
@@ -67,13 +73,19 @@ class ContactForm(forms.ModelForm):
     def clean_phone(self):
         phone = self.cleaned_data.get("phone")
 
-        # Check if the phone number is exactly 10 digits, starts with '98' or '97', and contains only digits
+        # Validate phone number to ensure it starts with 97 or 98 and is exactly 10 digits long.
         if len(phone) != 10 or not phone.startswith(('98', '97')) or not phone.isdigit():
             raise ValidationError(
                 "Phone number must start with '98' or '97' and be exactly 10 digits long."
             )
-
-        return phone  
+        return phone
+    
+    # Email validation using regex
+    def clean_email(self):
+        email = self.cleaned_data.get("email")
+        if "@" not in email or "." not in email.split("@")[-1]:
+            raise ValidationError("Enter a valid email address.")
+        return email
 
 
 class NewsletterForm(forms.ModelForm):

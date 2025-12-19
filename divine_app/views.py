@@ -4,7 +4,7 @@ from django.contrib import messages
 from divine_app.forms import AppointmentForm, ContactForm, NewsletterForm    
 from django.http import JsonResponse
 
-from divine_app.models import Appointment
+from divine_app.models import Appointment, Newsletter
 
 # Create your views here.
 class HomeView(TemplateView):
@@ -29,11 +29,6 @@ class AppointmentView(FormView):
 
     def form_invalid(self, form):
         return super().form_invalid(form)
-        # messages.error(
-        #     self.request,
-        #     "Can't reserve on the given date and time. Please select another."
-        # )
-        # return super().form_invalid(form)
 
 
 # For already booked slots
@@ -55,7 +50,8 @@ class ContactView(View):
     template_name = "divine/contact.html"
 
     def get(self, request):
-        return render(request, self.template_name)
+        form = ContactForm()
+        return render(request, self.template_name, {'form': form})
     
     def post(self, request):
         form = ContactForm(request.POST)
@@ -69,7 +65,7 @@ class ContactView(View):
             messages.error(
                 request, "Cannot submit your query. Please make sure all fields are valid.",
             )
-            return redirect("contact") 
+            return render(request, self.template_name, {'form': form})
             
 
 
@@ -78,6 +74,18 @@ class NewsletterView(View):
         is_ajax = request.headers.get("x-requested-with")
         if is_ajax == "XMLHttpRequest":
             form = NewsletterForm(request.POST)
+
+            email = request.POST.get("email")
+            
+            if Newsletter.objects.filter(email=email).exists():
+                return JsonResponse(
+                    {
+                        "success": False,
+                        "message": "You have already subscribed to the newsletter.",
+                    },
+                    status=400,
+                )
+
             if form.is_valid():
                 form.save()
                 return JsonResponse(

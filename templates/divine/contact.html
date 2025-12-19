@@ -32,24 +32,42 @@
 
             <div class="col-lg-6">
                 <div class="contact-form rounded p-5">
-                    <form method="POST" id="contactForm" novalidate>
+                    <form method="POST" id="contactForm" novalidate autocomplete="off">
                         {% csrf_token %}
                         <h1 class="display-6 mb-4">Do You have Any Questions?</h1>
                         <div class="row gx-4 gy-3">
-                            <div class="col-xl-6">
-                                <input type="text" name="name" id="name" value="{{ form.name.value|default:'' }}" class="form-control bg-white border-0 py-3 px-4" placeholder="Your Full Name">
+                            <div class="col-xl-6" style="position: relative;">
+                                <input type="text" name="name" id="name" value="{{ form.name.value|default:'' }}" class="form-control bg-white border-0 py-3 px-4" placeholder="Your Full Name" autocomplete="off">
                             </div>
-                            <div class="col-xl-6">
-                                <input type="email" name="email" id="email" value="{{ form.email.value|default:'' }}" class="form-control bg-white border-0 py-3 px-4" placeholder="Your Email">
+                            <div class="col-xl-6" style="position: relative;">
+                                <input type="email" name="email" id="email" value="{{ form.email.value|default:'' }}" class="form-control bg-white border-0 py-3 px-4 {% if form.email.errors %}is-invalid{% endif %}" placeholder="Your Email" autocomplete="off">
+                                {% if form.email.errors %}
+                                    <div class="error-popup">
+                                        <span class="error-text">
+                                            {% for error in form.email.errors %}
+                                                <p>{{ error }}</p>
+                                            {% endfor %}
+                                        </span>
+                                    </div>
+                                {% endif %}
                             </div>
-                            <div class="col-xl-6">
-                                <input type="text" name="phone" id="phone" value="{{ form.phone.value|default:'' }}" class="form-control bg-white border-0 py-3 px-4" placeholder="Your Phone">
+                            <div class="col-xl-6" style="position: relative;">
+                                <input type="tel" name="phone" id="phone" value="{{ form.phone.value|default:'' }}" class="form-control bg-white border-0 py-3 px-4 {% if form.phone.errors %}is-invalid{% endif %}" placeholder="Your Phone No."  autocomplete="off" oninput="this.value = this.value.replace(/[^0-9]/g, '')" pattern="\d{10}" maxlength="10" required>
+                                {% if form.phone.errors %}
+                                    <div class="error-popup">
+                                        <span class="error-text">
+                                            {% for error in form.phone.errors %}
+                                                <p>{{ error }}</p>
+                                            {% endfor %}
+                                        </span>
+                                    </div>
+                                {% endif %}
                             </div>
-                            <div class="col-xl-6">
-                                <input type="text" name="subject" id="subject" value="{{ form.subject.value|default:'' }}" class="form-control bg-white border-0 py-3 px-4" placeholder="Subject">
+                            <div class="col-xl-6" style="position: relative;">
+                                <input type="text" name="subject" id="subject" value="{{ form.subject.value|default:'' }}" class="form-control bg-white border-0 py-3 px-4" placeholder="Subject" autocomplete="off">
                             </div>
-                            <div class="col-12">
-                                <textarea name="message" id="message" class="form-control bg-white border-0 py-3 px-4" rows="4" placeholder="Your Message">{{ form.message.value|default:'' }}</textarea>
+                            <div class="col-12" style="position: relative;">
+                                <textarea name="message" id="message" class="form-control bg-white border-0 py-3 px-4" rows="4" placeholder="Your Message" autocomplete="off">{{ form.message.value|default:'' }}</textarea>
                             </div>
                             <div class="col-12">
                                 <button class="btn btn-primary btn-primary-outline-0 w-100 py-3 px-5" type="submit">Submit</button>
@@ -90,46 +108,5 @@
     {% endfor %}
 {% endif %}
 
-<script>
-    // Form validation function
-    document.getElementById('contactForm').addEventListener('submit', function(event) {
-        var isValid = true;
-        var errorMessages = [];
-        
-        // Check if all fields are filled
-        var fields = ['name', 'email', 'phone', 'subject', 'message'];
-        fields.forEach(function(field) {
-            var input = document.getElementById(field);
-            if (!input.value.trim()) {
-                isValid = false;
-                errorMessages.push(field.charAt(0).toUpperCase() + field.slice(1) + " is required.");
-                input.classList.add('is-invalid');
-            } else {
-                input.classList.remove('is-invalid');
-            }
-        });
-
-        // Phone number validation (starts with 98 and is exactly 10 digits)
-        var phone = document.getElementById('phone').value;
-        if (phone && (!phone.startsWith('98') || phone.length !== 10)) {
-            isValid = false;
-            errorMessages.push('Phone number must start with "98" and be exactly 10 digits long.');
-            document.getElementById('phone').classList.add('is-invalid');
-        }
-
-        // Display error messages if form is invalid
-        if (!isValid) {
-            event.preventDefault();
-            var popupMessage = document.getElementById('popupMessage');
-            var popupContent = document.getElementById('popupContent');
-            popupContent.textContent = errorMessages.join(' ');
-            popupMessage.style.backgroundColor = "red"; // Red for error messages
-            popupMessage.style.display = "block";
-            setTimeout(function() {
-                popupMessage.style.display = "none";
-            }, 4000);
-        }
-    });
-</script>
 
 {% endblock content %}

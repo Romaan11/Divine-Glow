@@ -8,19 +8,24 @@ class TimeStampModel(models.Model):
     class Meta:
         abstract = True
 
+class Service(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return self.name        
+
 class Appointment(TimeStampModel):
-    SERVICE_CHOICES = [
-        ('Hair Cut', 'Hair Cut'),
-        ('Facial', 'Facial'),
-        ('Massage', 'Massage'),
-    ]
+#     SERVICE_CHOICES = [
+#         ('', 'Select Service'),
+#         ('Hair Cut', 'Hair Cut'),
+#         ('Facial', 'Facial'),
+#         ('Massage', 'Massage'),
+#     ]
     name = models.CharField(max_length=100)
     email = models.EmailField()
     phone = models.CharField(max_length=15)
-    service = models.CharField(
-        max_length=50,
-        choices=SERVICE_CHOICES
-    )
+    service = models.ForeignKey(Service, on_delete=models.CASCADE)
     preferred_date = models.DateField()
     preferred_time = models.TimeField()
     message = models.TextField(blank=True, null=True)
@@ -34,7 +39,7 @@ class Appointment(TimeStampModel):
         ]
 
     def __str__(self):
-        return f"{self.name} - {self.preferred_date}"
+        return f"{self.name} - {self.preferred_date} - {self.service.name}"
 
 class Contact(TimeStampModel):
     name = models.CharField(max_length=100)

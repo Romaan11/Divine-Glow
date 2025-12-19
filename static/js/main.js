@@ -111,6 +111,146 @@
 })(jQuery);
 
 
+// Contact
+// Prevent form refresh clearing the data
+window.onload = function() {
+    if (sessionStorage.getItem("formSubmitted")) {
+        sessionStorage.removeItem("formSubmitted");
+    }
+}
+
+// Form validation function
+document.getElementById('contactForm').addEventListener('submit', function(event) {
+    var isValid = true;
+    var errorMessages = [];
+    
+    // Check if all fields are filled
+    var fields = ['name', 'email', 'phone', 'subject', 'message'];
+    fields.forEach(function(field) {
+        var input = document.getElementById(field);
+        var errorPopup = input.nextElementSibling;
+
+        if (!input.value.trim()) {
+            isValid = false;
+            errorMessages.push(field.charAt(0).toUpperCase() + field.slice(1) + " is required.");
+            input.classList.add('is-invalid');
+            if (errorPopup){
+                errorPopup.style.display = 'flex'; // Show the pop-up
+                errorPopup.classList.remove('hide');
+                // Hide error after 4 seconds
+                setTimeout(function() {
+                    errorPopup.classList.add('hide');
+                    setTimeout(function() {
+                        errorPopup.style.display = 'none'; // Ensure the pop-up is fully hidden
+                    }, 300); // Match the transition time
+                }, 4000);
+            }
+        } else{
+            input.classList.remove('is-invalid');
+            if (errorPopup) {
+                errorPopup.classList.add('hide'); // Hide the pop-up when input is correct
+                setTimeout(function() {
+                    errorPopup.style.display = 'none'; // Ensure the pop-up is fully hidden
+                }, 300); // Match the transition time
+            }
+        }
+    });
+
+    // Phone number validation (must start with 98 or 97, only 10 digits)
+    var phone = document.getElementById('phone').value;
+    var phoneErrorPopup = document.getElementById('phone').nextElementSibling;
+    if (!/^(98|97)\d{8}$/.test(phone)) {
+        isValid = false;
+        errorMessages.push('Phone no. must start with 98 or 97 and be exactly 10 digits.');
+        document.getElementById('phone').classList.add('is-invalid');
+        if (phoneErrorPopup) {
+            phoneErrorPopup.style.display = 'flex'; // Show error pop-up for phone
+            phoneErrorPopup.classList.remove('hide');
+            // Hide error after 4 seconds
+            setTimeout(function() {
+                phoneErrorPopup.classList.add('hide');
+                setTimeout(function() {
+                    phoneErrorPopup.style.display = 'none'; // Ensure the pop-up is fully hidden
+                }, 300); // Match the transition time
+            }, 4000);
+        }
+    } else {
+        if (phoneErrorPopup) {
+            phoneErrorPopup.classList.add('hide'); // Hide phone error pop-up
+            setTimeout(function() {
+                phoneErrorPopup.style.display = 'none'; // Ensure the pop-up is fully hidden
+            }, 300); // Match the transition time
+        }
+    }
+
+    // Email validation (checking if it contains @ symbol)
+    var email = document.getElementById('email').value;
+    var emailErrorPopup = document.getElementById('email').nextElementSibling;
+    if (!/\S+@\S+\.\S+/.test(email)) {
+        isValid = false;
+        errorMessages.push('Enter a valid email address.');
+        document.getElementById('email').classList.add('is-invalid');
+        if (emailErrorPopup) {
+            emailErrorPopup.style.display = 'flex'; // Show error pop-up for email
+            emailErrorPopup.classList.remove('hide');
+            // Hide error after 4 seconds
+            setTimeout(function() {
+                emailErrorPopup.classList.add('hide');
+                setTimeout(function() {
+                    emailErrorPopup.style.display = 'none'; // Ensure the pop-up is fully hidden
+                }, 300); // Match the transition time
+            }, 4000);
+        }
+    } else {
+        if (emailErrorPopup) {
+            emailErrorPopup.classList.add('hide'); // Hide email error pop-up
+            setTimeout(function() {
+                emailErrorPopup.style.display = 'none'; // Ensure the pop-up is fully hidden
+            }, 300); // Match the transition time
+        }
+    }
+
+    // Display error messages if form is invalid
+    if (!isValid) {
+        event.preventDefault();
+        var popupMessage = document.getElementById('popupMessage');
+        var popupContent = document.getElementById('popupContent');
+        popupContent.textContent = errorMessages.join(' ');
+        popupMessage.style.backgroundColor = "red"; // Red for error messages
+        popupMessage.style.display = "block";
+        setTimeout(function() {
+            popupMessage.style.display = "none";
+        }, 4000);
+    }
+});
+
+// Real-time error removal on input change
+document.querySelectorAll('input, textarea').forEach(function(input) {
+    input.addEventListener('input', function() {
+        var errorPopup = input.nextElementSibling; // Get the error message div
+        if (input.classList.contains('is-invalid') && errorPopup) {
+            // If the input is corrected, hide the error immediately
+            input.classList.remove('is-invalid');
+            errorPopup.classList.add('hide');
+            setTimeout(function() {
+                errorPopup.style.display = 'none'; // Ensure the pop-up is fully hidden
+            }, 300); // Match the transition time
+        }
+    });
+});
+
+// Clicking the error icon to show the error message again
+document.querySelectorAll('.error-icon').forEach(function(icon) {
+    icon.addEventListener('click', function() {
+        var errorPopup = icon.parentElement; // Get the error message div
+        errorPopup.style.display = 'flex'; // Show the error message
+        errorPopup.classList.remove('hide');
+    });
+});
+
+
+
+
 // Newsletter AJAX form submission
 document.getElementById("newsletter_form").addEventListener("submit", function (e) {
     e.preventDefault();
@@ -172,3 +312,5 @@ document.getElementById("newsletter_form").addEventListener("submit", function (
         }, 4000);
     });
 });
+
+
