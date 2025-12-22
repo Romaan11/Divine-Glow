@@ -25,6 +25,22 @@
         }
     });
 
+    //search
+    document.getElementById('searchButton').addEventListener('click', function() {
+        var searchContainer = document.querySelector('.search-container');
+        var searchInput = document.querySelector('.search-container input');
+        
+        // Toggle search input visibility and width
+        if (!searchContainer.classList.contains('open')) {
+            searchContainer.classList.add('open');  // Show search input
+            searchInput.classList.add('open');  // Expand input width
+        } else {
+            searchContainer.classList.remove('open');  // Hide search input
+            searchInput.classList.remove('open');  // Shrink input width
+        }
+    });
+
+
     // Back to top button
     $(window).scroll(function () {
         if ($(this).scrollTop() > 300) {
@@ -112,7 +128,6 @@
 
 
 // Contact
-// Prevent form refresh clearing the data
 window.onload = function() {
     if (sessionStorage.getItem("formSubmitted")) {
         sessionStorage.removeItem("formSubmitted");

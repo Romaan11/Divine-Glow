@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
-from django.views.generic import TemplateView, View, FormView
+from django.views.generic import TemplateView, View, FormView, ListView
 from django.contrib import messages
-from divine_app.forms import AppointmentForm, ContactForm, NewsletterForm    
+from divine_app.forms import Service, AppointmentForm, ContactForm, NewsletterForm    
 from django.http import JsonResponse
 
 from divine_app.models import Appointment, Newsletter
@@ -13,6 +13,16 @@ class HomeView(TemplateView):
 class AboutView(TemplateView):
     template_name = 'divine/about.html'
 
+class ServiceView(ListView):
+    model = Service
+    template_name = 'divine/service.html'
+    context_object_name = 'services'
+
+    def get_queryset(self):
+        qs = Service.objects.all()
+        if self.request.GET.get('all'):
+            return qs
+        return qs[:8]
 
 class AppointmentView(FormView):
     template_name = 'divine/appointment.html'

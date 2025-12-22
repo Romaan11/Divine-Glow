@@ -1,6 +1,7 @@
 from django.db import models
+from divine_app.validators import max_20_words
 
-# Create your models here.
+
 class TimeStampModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -10,7 +11,12 @@ class TimeStampModel(models.Model):
 
 class Service(models.Model):
     name = models.CharField(max_length=100)
-    description = models.TextField(blank=True, null=True)
+    image = models.ImageField(upload_to='services/%Y/%m/%d',null=True, blank=True)
+    description = models.TextField(
+        validators=[max_20_words],
+        blank=True,
+        null=True
+    )
 
     def __str__(self):
         return self.name        
