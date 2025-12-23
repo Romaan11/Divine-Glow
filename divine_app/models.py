@@ -22,12 +22,6 @@ class Service(models.Model):
         return self.name        
 
 class Appointment(TimeStampModel):
-#     SERVICE_CHOICES = [
-#         ('', 'Select Service'),
-#         ('Hair Cut', 'Hair Cut'),
-#         ('Facial', 'Facial'),
-#         ('Massage', 'Massage'),
-#     ]
     name = models.CharField(max_length=100)
     email = models.EmailField()
     phone = models.CharField(max_length=15)

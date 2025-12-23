@@ -30,13 +30,13 @@
         var searchContainer = document.querySelector('.search-container');
         var searchInput = document.querySelector('.search-container input');
         
-        // Toggle search input visibility and width
+       
         if (!searchContainer.classList.contains('open')) {
-            searchContainer.classList.add('open');  // Show search input
-            searchInput.classList.add('open');  // Expand input width
+            searchContainer.classList.add('open');  
+            searchInput.classList.add('open');  
         } else {
-            searchContainer.classList.remove('open');  // Hide search input
-            searchInput.classList.remove('open');  // Shrink input width
+            searchContainer.classList.remove('open');  
+            searchInput.classList.remove('open');  
         }
     });
 
@@ -54,6 +54,33 @@
         $('html, body').animate({ scrollTop: 0 }, 1500, 'easeInOutExpo');
         return false;
     });
+
+    //Services
+document.addEventListener('DOMContentLoaded', function() {
+    const serviceWrapper = document.querySelector('.service-wrapper');
+    const serviceSelect = document.querySelector('select[name="service"]');
+    const serviceTooltip = document.getElementById('serviceTooltip');
+
+    if (serviceWrapper && serviceSelect && serviceTooltip) {
+        serviceTooltip.style.display = 'none';  
+        serviceWrapper.style.position = 'relative'; 
+
+        
+        serviceWrapper.addEventListener('mousedown', function(event) {
+            if (serviceSelect.disabled) {
+                serviceTooltip.style.display = 'block';  
+
+                // Hide after 3 seconds
+                setTimeout(() => {
+                    serviceTooltip.style.display = 'none';
+                }, 3000);
+
+                event.preventDefault(); 
+            }
+        });
+    }
+});
+
 
     // Pricing-carousel
     if ($('.pricing-carousel').length) {     
@@ -150,23 +177,23 @@ document.getElementById('contactForm').addEventListener('submit', function(event
             errorMessages.push(field.charAt(0).toUpperCase() + field.slice(1) + " is required.");
             input.classList.add('is-invalid');
             if (errorPopup){
-                errorPopup.style.display = 'flex'; // Show the pop-up
+                errorPopup.style.display = 'flex';
                 errorPopup.classList.remove('hide');
-                // Hide error after 4 seconds
+                
                 setTimeout(function() {
                     errorPopup.classList.add('hide');
                     setTimeout(function() {
-                        errorPopup.style.display = 'none'; // Ensure the pop-up is fully hidden
-                    }, 300); // Match the transition time
+                        errorPopup.style.display = 'none'; 
+                    }, 300); 
                 }, 4000);
             }
         } else{
             input.classList.remove('is-invalid');
             if (errorPopup) {
-                errorPopup.classList.add('hide'); // Hide the pop-up when input is correct
+                errorPopup.classList.add('hide'); 
                 setTimeout(function() {
-                    errorPopup.style.display = 'none'; // Ensure the pop-up is fully hidden
-                }, 300); // Match the transition time
+                    errorPopup.style.display = 'none'; 
+                }, 300); 
             }
         }
     });
@@ -179,22 +206,22 @@ document.getElementById('contactForm').addEventListener('submit', function(event
         errorMessages.push('Phone no. must start with 98 or 97 and be exactly 10 digits.');
         document.getElementById('phone').classList.add('is-invalid');
         if (phoneErrorPopup) {
-            phoneErrorPopup.style.display = 'flex'; // Show error pop-up for phone
+            phoneErrorPopup.style.display = 'flex'; 
             phoneErrorPopup.classList.remove('hide');
-            // Hide error after 4 seconds
+            
             setTimeout(function() {
                 phoneErrorPopup.classList.add('hide');
                 setTimeout(function() {
-                    phoneErrorPopup.style.display = 'none'; // Ensure the pop-up is fully hidden
-                }, 300); // Match the transition time
+                    phoneErrorPopup.style.display = 'none'; 
+                }, 300);
             }, 4000);
         }
     } else {
         if (phoneErrorPopup) {
-            phoneErrorPopup.classList.add('hide'); // Hide phone error pop-up
+            phoneErrorPopup.classList.add('hide'); 
             setTimeout(function() {
-                phoneErrorPopup.style.display = 'none'; // Ensure the pop-up is fully hidden
-            }, 300); // Match the transition time
+                phoneErrorPopup.style.display = 'none';
+            }, 300); 
         }
     }
 
@@ -206,22 +233,22 @@ document.getElementById('contactForm').addEventListener('submit', function(event
         errorMessages.push('Enter a valid email address.');
         document.getElementById('email').classList.add('is-invalid');
         if (emailErrorPopup) {
-            emailErrorPopup.style.display = 'flex'; // Show error pop-up for email
+            emailErrorPopup.style.display = 'flex'; 
             emailErrorPopup.classList.remove('hide');
-            // Hide error after 4 seconds
+            
             setTimeout(function() {
                 emailErrorPopup.classList.add('hide');
                 setTimeout(function() {
-                    emailErrorPopup.style.display = 'none'; // Ensure the pop-up is fully hidden
-                }, 300); // Match the transition time
+                    emailErrorPopup.style.display = 'none'; 
+                }, 300); 
             }, 4000);
         }
     } else {
         if (emailErrorPopup) {
-            emailErrorPopup.classList.add('hide'); // Hide email error pop-up
+            emailErrorPopup.classList.add('hide'); 
             setTimeout(function() {
-                emailErrorPopup.style.display = 'none'; // Ensure the pop-up is fully hidden
-            }, 300); // Match the transition time
+                emailErrorPopup.style.display = 'none'; 
+            }, 300); 
         }
     }
 
@@ -231,7 +258,7 @@ document.getElementById('contactForm').addEventListener('submit', function(event
         var popupMessage = document.getElementById('popupMessage');
         var popupContent = document.getElementById('popupContent');
         popupContent.textContent = errorMessages.join(' ');
-        popupMessage.style.backgroundColor = "red"; // Red for error messages
+        popupMessage.style.backgroundColor = "red"; 
         popupMessage.style.display = "block";
         setTimeout(function() {
             popupMessage.style.display = "none";
@@ -242,14 +269,14 @@ document.getElementById('contactForm').addEventListener('submit', function(event
 // Real-time error removal on input change
 document.querySelectorAll('input, textarea').forEach(function(input) {
     input.addEventListener('input', function() {
-        var errorPopup = input.nextElementSibling; // Get the error message div
+        var errorPopup = input.nextElementSibling; 
         if (input.classList.contains('is-invalid') && errorPopup) {
-            // If the input is corrected, hide the error immediately
+            
             input.classList.remove('is-invalid');
             errorPopup.classList.add('hide');
             setTimeout(function() {
-                errorPopup.style.display = 'none'; // Ensure the pop-up is fully hidden
-            }, 300); // Match the transition time
+                errorPopup.style.display = 'none'; 
+            }, 300);
         }
     });
 });
@@ -257,8 +284,8 @@ document.querySelectorAll('input, textarea').forEach(function(input) {
 // Clicking the error icon to show the error message again
 document.querySelectorAll('.error-icon').forEach(function(icon) {
     icon.addEventListener('click', function() {
-        var errorPopup = icon.parentElement; // Get the error message div
-        errorPopup.style.display = 'flex'; // Show the error message
+        var errorPopup = icon.parentElement; 
+        errorPopup.style.display = 'flex'; 
         errorPopup.classList.remove('hide');
     });
 });
@@ -301,7 +328,7 @@ document.getElementById("newsletter_form").addEventListener("submit", function (
             messageDiv.innerHTML = data.message;
         }
 
-        // Hide after 4 seconds (slide + fade)
+        
         setTimeout(() => {
             messageDiv.style.opacity = "0";
             messageDiv.style.maxHeight = "0";

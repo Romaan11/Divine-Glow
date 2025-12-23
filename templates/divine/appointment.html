@@ -42,13 +42,13 @@
                             </div>
                             <div class="col-lg-6">
                                 <input type="tel" name="phone"
-                                    value="{{ form.phone.value|default:'' }}"
+                                    maxlength="10"
+                                    pattern="(97|98)[0-9]{8}"
+                                    title="Phone number must start with 98 and be exactly 10 digits"
+                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                     class="form-control py-3 {% if form.phone.errors %}border-danger{% endif %}"
                                     placeholder="Phone No."
-                                    maxlength="10"
-                                    pattern="9[78][0-9]{8}"
-                                    title="Phone number must start with 98 and be exactly 10 digits"
-                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                    value="{{ form.phone.value|default:'' }}">
                                 {% if form.phone.errors %}
                                     <div class="text-danger small mt-1">{{ form.phone.errors.0 }}</div>
                                 {% endif %}
@@ -58,8 +58,16 @@
                                     {{ form.preferred_date }}
                             </div>
 
-                            <div class="col-lg-6">
+                            <div class="col-lg-6 position-relative service-wrapper">
                                 {{ form.service }}
+
+                                {% if locked_service %}
+                                    <input type="hidden" name="service" value="{{ form.fields.service.initial.id }}">
+                                    <div class="service-tooltip" id="serviceTooltip">
+                                        Service selected from services page and cannot be changed.
+                                    </div>
+                                {% endif %}
+
                                 {% if form.service.errors %}
                                   <div class="text-danger">{{ form.service.errors }}</div>
                                 {% endif %}

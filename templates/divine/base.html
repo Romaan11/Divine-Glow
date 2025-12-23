@@ -86,6 +86,13 @@
 
     <!-- Template Javascript -->
     <script src="{% static 'js/main.js' %}"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var loginModal = new bootstrap.Modal(document.getElementById('loginModal'))
+            loginModal.show()
+        });
+    </script>
     </body>
 
 </html>

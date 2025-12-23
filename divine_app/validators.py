@@ -1,5 +1,7 @@
 from django.core.exceptions import ValidationError
 
+
+# Validator to ensure description does not exceed 20 words in services
 def max_20_words(value):
     words = value.split()
     if len(words) > 20:

@@ -1,4 +1,5 @@
 {% extends "divine/base.html" %}
+{% load static %}
 
 {% block content %}
 
@@ -25,23 +26,59 @@
         <div class="row g-4">
             {% for service in services %}
             <div class="col-lg-6">
-                <div class="services-item bg-light border-4 border-end border-primary rounded p-4">
+                <div class="services-item bg-light border-4 rounded p-4
+                    {% if forloop.counter|divisibleby:2 %} service-right {% else %} service-left {% endif %}">
+                    
                     <div class="row align-items-center">
-                        <div class="col-8">
-                            <div class="services-content text-end">
-                                <h3>{{ service.name }}</h3>
-                                <p>{{ service.description }}</p>
-                                <a href="#" class="btn btn-primary btn-primary-outline-0 rounded-pill py-2 px-4">Make Order</a>
+                        {% if forloop.counter|divisibleby:2 %}
+                            <!-- Image LEFT -->
+                            <div class="col-4">
+                                <div class="services-img d-flex justify-content-center">
+                                    {% if service.image %}
+                                        <img src="{{ service.image.url }}" class="img-fluid rounded" alt="{{ service.name }}">
+                                    {% else %}
+                                        <img src="{% static 'img/default-service.jpg' %}" class="img-fluid rounded" alt="{{ service.name }}">
+                                    {% endif %}
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="services-img d-flex align-items-center justify-content-center rounded">
-                                <img src="{{ service.image.url}}" class="img-fluid rounded" alt="{{ service.name }}">
+
+                            <!-- Text RIGHT -->
+                            <div class="col-8">
+                                <div class="services-content text-start">
+                                    <h3>{{ service.name }}</h3>
+                                    <a href="{% url 'appointment' %}?service={{ service.id }}#appointment"
+                                    class="btn btn-primary rounded-pill py-2 px-4">
+                                        Book Service
+                                    </a>
+                                </div>
                             </div>
-                        </div>
+                        {% else %}
+                            <!-- Text LEFT -->
+                            <div class="col-8">
+                                <div class="services-content text-end">
+                                    <h3>{{ service.name }}</h3>
+                                    <a href="{% url 'appointment' %}?service={{ service.id }}#appointment"
+                                    class="btn btn-primary rounded-pill py-2 px-4">
+                                        Book Service
+                                    </a>
+                                </div>
+                            </div>
+
+                            <!-- Image RIGHT -->
+                            <div class="col-4">
+                                <div class="services-img d-flex justify-content-center">
+                                    {% if service.image %}
+                                        <img src="{{ service.image.url }}" class="img-fluid rounded" alt="{{ service.name }}">
+                                    {% else %}
+                                        <img src="{% static 'img/default-service.jpg' %}" class="img-fluid rounded" alt="{{ service.name }}">
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
+
             {% endfor %}
 
             <div class="col-12">

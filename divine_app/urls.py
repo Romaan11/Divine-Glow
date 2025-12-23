@@ -9,4 +9,8 @@ urlpatterns = [
     path('booked-slots/', views.BookedSlotsView.as_view(), name='booked_slots'),
     path("contact/", views.ContactView.as_view(), name="contact"), 
     path("newsletter/", views.NewsletterView.as_view(), name="newsletter"), 
+
+    path('login/', views.UserLoginView.as_view(), name='login'),
+    path('logout/', views.UserLogoutView.as_view(), name='logout'),
+    path('signup/', views.UserSignupView.as_view(), name='signup'),
 ]
