@@ -1,6 +1,8 @@
 from django.db import models
 from divine_app.validators import max_20_words
-
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save, post_delete
+from django.dispatch import receiver
 
 class TimeStampModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
@@ -8,6 +10,29 @@ class TimeStampModel(models.Model):
 
     class Meta:
         abstract = True
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    username = models.CharField(max_length=150, unique=True)
+    email = models.EmailField(unique=True)  
+    phone = models.CharField(max_length=10) 
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username}'s profile"
+
+# Automatically create a profile when a user is created
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        UserProfile.objects.create(user=instance, username=instance.username, email=instance.email, phone='') 
+
+# Automatically delete profile when user is deleted
+@receiver(post_delete, sender=User)
+def delete_user_profile(sender, instance, **kwargs):
+    if hasattr(instance, 'userprofile'):
+        instance.userprofile.delete()
+
 
 class Service(models.Model):
     name = models.CharField(max_length=100)

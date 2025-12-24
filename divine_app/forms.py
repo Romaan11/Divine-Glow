@@ -1,30 +1,29 @@
-from django.utils import timezone
-from datetime import time
 from django import forms
 from divine_app.models import Appointment,Contact, Newsletter, Service
 from django.core.exceptions import ValidationError
 import re
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import authenticate
+from django.contrib.auth.models import User
 
-class LoginForm(AuthenticationForm):
-    username = forms.CharField(
-        max_length=150,
+class SignupForm(forms.Form):
+    email = forms.EmailField(
+        required=True,
+        widget=forms.EmailInput(attrs={
+            'class': 'custom-input',
+            'autocomplete': 'off', 
+            'placeholder': 'Email Address'
+        })
+    )
+    phone = forms.CharField(
+        max_length=10,
         required=True,
         widget=forms.TextInput(attrs={
             'class': 'custom-input',
             'autocomplete': 'off', 
-            'placeholder': 'Username'
+            'placeholder': 'Phone Number'
         })
     )
-    password = forms.CharField(
-        required=True,
-        widget=forms.PasswordInput(attrs={
-            'class': 'custom-input',
-            'placeholder': 'Password'
-        })
-    )
-
-class SignupForm(forms.Form):
     username = forms.CharField(
         max_length=150,
         required=True,
@@ -38,6 +37,7 @@ class SignupForm(forms.Form):
         required=True,
         widget=forms.PasswordInput(attrs={
             'class': 'custom-input',
+            'autocomplete': 'off', 
             'placeholder': 'Password'
         })
     )
@@ -45,9 +45,26 @@ class SignupForm(forms.Form):
         required=True,
         widget=forms.PasswordInput(attrs={
             'class': 'custom-input',
+            'autocomplete': 'off', 
             'placeholder': 'Confirm Password'
         })
     )
+
+    # Validate phone
+    def clean_phone(self):
+        phone = self.cleaned_data.get("phone")
+        if not phone.startswith(('98','97')) or len(phone) != 10 or not phone.isdigit():
+            raise ValidationError("Phone must start with 98 or 97 and be exactly 10 digits")
+        return phone
+    
+    # Validate email
+    def clean_email(self):
+        email = self.cleaned_data.get("email")
+        if "@" not in email or "." not in email.split("@")[-1]:
+            raise ValidationError("Enter a valid email address")
+        if User.objects.filter(email=email).exists():
+            raise ValidationError("Email already registered. Please use a different email.")
+        return email
 
     def validate_password_rules(self, password):
         if len(password) < 8:
@@ -81,6 +98,54 @@ class SignupForm(forms.Form):
             raise ValidationError("Passwords do not match")
 
         return cleaned_data
+
+
+class LoginForm(forms.Form):
+    email = forms.EmailField(
+        required=True,
+        widget=forms.EmailInput(attrs={
+            'class': 'custom-input',
+            'autocomplete': 'off', 
+            'placeholder': 'Email Address'
+        })
+    )
+    password = forms.CharField(
+        required=True,
+        widget=forms.PasswordInput(attrs={
+            'class': 'custom-input',
+            'autocomplete': 'off', 
+            'placeholder': 'Password'
+        })
+    )
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None) 
+        super().__init__(*args, **kwargs)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        email = cleaned_data.get("email")
+        password = cleaned_data.get("password")
+
+        
+        if email and password:
+            try:
+                user = User.objects.get(email=email)
+            except User.DoesNotExist:
+                raise forms.ValidationError("Invalid email or password")
+
+            self.user = authenticate(
+                username=user.username,
+                password=password
+            )
+
+            if self.user is None:
+                raise forms.ValidationError("Invalid email or password")
+
+        return cleaned_data
+
+    def get_user(self):
+        return self.user
 
 
 class AppointmentForm(forms.ModelForm):
