@@ -1,6 +1,27 @@
 {% extends 'divine/base.html' %}
 
 {% block content %}
+
+<div id="toast-container" style="
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 99999;
+    display: none;
+">
+    <div id="toast-message" style="
+        color: #fff;
+        padding: 15px 20px;
+        border-radius: 8px;
+        min-width: 300px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        opacity: 0;
+        transition: opacity 0.5s ease, transform 0.5s ease;
+        transform: translateY(-20px);
+    ">
+    </div>
+</div>
+
 <div class="login-page-container py-5">
     <div class="login-box shadow-lg p-4 mx-auto">
 
@@ -31,4 +52,50 @@
 
     </div>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const container = document.getElementById("toast-container");
+    const toast = document.getElementById("toast-message");
+
+    {% if messages %}
+        {% for message in messages %}
+            showToast("{{ message|escapejs }}", "success");
+        {% endfor %}
+    {% endif %}
+
+    {% if form.errors %}
+        showToast("Email or Password is incorrect.", "error");
+    {% endif %}
+
+    function showToast(message, type="success") {
+        toast.innerText = message;
+
+        if(type === "error"){
+            toast.style.background = "#f74343"; 
+            toast.style.boxShadow = "0 10px 30px rgba(247,67,67,0.3)";
+        } else {
+            toast.style.background = "#28a745"; 
+            toast.style.boxShadow = "0 10px 30px rgba(40,167,69,0.3)";
+        }
+
+        container.style.display = "block";
+
+        setTimeout(() => {
+            toast.style.opacity = "1";
+            toast.style.transform = "translateY(0)";
+        }, 50);
+
+        // Fade out after 4 seconds
+        setTimeout(() => {
+            toast.style.opacity = "0";
+            toast.style.transform = "translateY(-20px)";
+            setTimeout(() => {
+                container.style.display = "none";
+            }, 500);
+        }, 4000);
+    }
+});
+</script>
+
 {% endblock %}

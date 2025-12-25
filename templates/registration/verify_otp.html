@@ -1,0 +1,82 @@
+{% extends 'divine/base.html' %}
+
+{% block content %}
+
+<div id="toast-container"
+     style="
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 99999;
+        display: none;
+     ">
+    <div id="toast-message"
+         style="
+            background: #f74343ff;
+            color: #fff;
+            padding: 15px 20px;
+            border-radius: 8px;
+            min-width: 300px;
+            box-shadow: 0 10px 30px rgba(250, 82, 82, 0.3);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+         ">
+    </div>
+</div>
+
+<div class="login-page-container py-5">
+    <div class="login-box shadow-lg p-4 mx-auto">
+
+        <h2 class="text-center text-pink mb-3">Verify OTP 🔐</h2>
+
+        <p class="text-center text-muted mb-4">
+            Enter the 6-digit OTP sent to your email
+        </p>
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="form-label">OTP</label>
+                {{ form.otp }}
+            </div>
+
+            <button type="submit" class="btn btn-pink w-100 mt-3">
+                Verify OTP
+            </button>
+        </form>
+
+    </div>
+</div>
+
+{% if form.errors %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    // Extract and clean form errors for display in toast
+    let rawErrors = `{{ form.errors|striptags|escapejs }}`;
+    showToast(rawErrors);
+});
+
+function showToast(message) {
+    const container = document.getElementById("toast-container");
+    const toast = document.getElementById("toast-message");
+
+    toast.innerText = message;
+    container.style.display = "block";
+
+    // fade in
+    setTimeout(() => {
+        toast.style.opacity = "1";
+    }, 50);
+
+    // fade out after 4 seconds
+    setTimeout(() => {
+        toast.style.opacity = "0";
+        setTimeout(() => {
+            container.style.display = "none";
+        }, 500);
+    }, 4000);
+}
+</script>
+{% endif %}
+
+{% endblock %}

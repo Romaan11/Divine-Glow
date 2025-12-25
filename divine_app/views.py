@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import TemplateView, View, FormView, ListView
 from django.contrib import messages
 from django import forms 
-from divine_app.forms import LoginForm, Service, AppointmentForm, ContactForm, NewsletterForm, SignupForm    
+from divine_app.forms import LoginForm, Service, AppointmentForm, ContactForm, NewsletterForm, SignupForm, OTPForm    
 from django.http import JsonResponse
 from divine_app.models import UserProfile, Appointment, Newsletter
 
@@ -13,6 +13,7 @@ from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
 import random
 from django.core.mail import send_mail
+from django.contrib.auth import logout
 
 class UserLoginView(LoginView):
     template_name = 'registration/login.html'
@@ -60,24 +61,19 @@ class UserSignupView(FormView):
         
         return redirect('verify_otp')
 
-        # User.objects.create_user(
-        #     username=form.cleaned_data['username'],
-        #     password=form.cleaned_data['password1']
-        # )
-        # return super().form_valid(form)
 
 class OTPVerifiyView(FormView):
     template_name = 'registration/verify_otp.html'
-    success_url = reverse_lazy('login')
-
-    class OTPForm(forms.Form):
-        otp =  forms.CharField(max_length=6, required=True)
-
     form_class = OTPForm
+    success_url = reverse_lazy('login')
 
     def form_valid(self, form):
         session_otp = self.request.session.get('signup_otp')
         entered_otp = form.cleaned_data.get('otp')
+
+        if not session_otp:
+            form.add_error(None, "OTP expired. Please sign up again.")
+            return self.form_invalid(form)
 
         if str(session_otp) != entered_otp:
             form.add_error('otp', 'Invalid OTP. Please enter the correct OTP.')
@@ -85,31 +81,57 @@ class OTPVerifiyView(FormView):
 
         # Get signup data from session
         data = self.request.session.get('signup_data')
-        # Create user after OTP verification
-        user = User.objects.create_user(
-            username=data['username'],
-            password=data['password1'],
-            email=data['email']
-        )
-        
-        # Create profile
-        user_profile = UserProfile.objects.create(
-            user = user,
-            username = data['username'],
-            email = data['email'],
-            phone = data['phone']
-        )    
-        
-        # Clear session data
-        del self.request.session['signup_otp']
-        del self.request.session['signup_data']
 
-        messages.success(self.request, "Signup successful. You can now log in.")
+        # Create or get user
+        user, created = User.objects.get_or_create(
+            username=data['username'],
+            defaults={'email': data['email']}
+        )
+
+        if created:
+            # Set password for new user
+            user.set_password(data['password1'])
+            user.save()
+
+        # Create or get user profile (prevents duplicate)
+        UserProfile.objects.get_or_create(
+            user=user,
+            defaults={
+                'username': data['username'],
+                'email': data['email'],
+                'phone': data['phone']
+            }
+        )
+
+        # Cleanup session
+        self.request.session.pop('signup_otp', None)
+        self.request.session.pop('signup_data', None)
+
+        messages.success(self.request, "Signup successful. Please login.")
         return super().form_valid(form)
 
+class UserLogoutView(View):
+    template_name = 'registration/logout.html'
+    success_url = reverse_lazy('home')
 
-class UserLogoutView(LogoutView):
-    next_page = reverse_lazy('home')
+    def get(self, request, *args, **kwargs):
+        # Show confirmation page with popup
+        return render(request, self.template_name)
+
+    def post(self, request, *args, **kwargs):
+        if 'confirm' in request.POST:
+            logout(request)
+            return redirect(self.success_url)
+        else:
+            # Cancel pressed: redirect back or home
+            referer = request.META.get('HTTP_REFERER')
+            if referer and referer != request.build_absolute_uri():
+                return redirect(referer)
+            return redirect(self.success_url)
+
+
+# class UserLogoutView(LogoutView):
+#     next_page = reverse_lazy('home')
 
 
 

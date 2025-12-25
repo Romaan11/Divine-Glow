@@ -1,13 +1,46 @@
 {% extends 'divine/base.html' %}
 
 {% block content %}
+
+<div id="toast-container"
+     style="
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 99999;
+        display: none;
+     ">
+    <div id="toast-message"
+         style="
+            background: #f74343ff;
+            color: #fff;
+            padding: 15px 20px;
+            border-radius: 8px;
+            min-width: 300px;
+            box-shadow: 0 10px 30px rgba(250, 82, 82, 0.3);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+         ">
+    </div>
+</div>
+
 <div class="login-page-container py-5"> 
     <div class="login-box shadow-lg p-4 mx-auto">
 
         <h2 class="text-center text-pink mb-4">Create Account ✨</h2>
 
-        <form method="post">
+        <form method="post" id="signupForm">
             {% csrf_token %}
+
+            <div class="mb-3">
+                <label class="form-label">Email Address</label>
+                {{ form.email }}
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Phone No.</label>
+                {{ form.phone }}
+            </div>
 
             <div class="mb-3">
                 <label class="form-label">Username</label>
@@ -31,11 +64,18 @@
 
         <p class="text-center mt-3">
             Already have an account?
-            <a href="{% url 'login' %}" class="text-pink fw-bold">
-                Login
-            </a>
+            <a href="{% url 'login' %}" class="text-pink fw-bold">Login</a>
         </p>
 
     </div>
 </div>
+
+{% if form.errors %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    showToast("{{ form.errors|striptags }}");
+});
+</script>
+{% endif %}
+
 {% endblock %}

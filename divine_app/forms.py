@@ -67,6 +67,9 @@ class SignupForm(forms.Form):
         return email
 
     def validate_password_rules(self, password):
+        if not password:
+            raise ValidationError("Password is required.")
+
         if len(password) < 8:
             raise ValidationError("Password must be at least 8 characters long.")
 
@@ -84,11 +87,6 @@ class SignupForm(forms.Form):
         self.validate_password_rules(password1)
         return password1
 
-    def clean_password2(self):
-        password2 = self.cleaned_data.get("password2")
-        self.validate_password_rules(password2)
-        return password2
-
     def clean(self):
         cleaned_data = super().clean()
         password1 = cleaned_data.get("password1")
@@ -98,6 +96,18 @@ class SignupForm(forms.Form):
             raise ValidationError("Passwords do not match")
 
         return cleaned_data
+
+
+class OTPForm(forms.Form):
+    otp = forms.CharField(
+        max_length=6,
+        required=True,
+        widget=forms.TextInput(attrs={
+            'class': 'custom-input',
+            'placeholder': 'Enter 6-digit OTP',
+            'autocomplete': 'off'
+        })
+    )
 
 
 class LoginForm(forms.Form):
@@ -242,7 +252,6 @@ class ContactForm(forms.ModelForm):
             )
         return phone
     
-    # Email validation using regex
     def clean_email(self):
         email = self.cleaned_data.get("email")
         if "@" not in email or "." not in email.split("@")[-1]:
