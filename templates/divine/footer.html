@@ -7,8 +7,7 @@
                     <h4 class="mb-4 text-white">Newsletter</h4>
                     <p class="text-white">Subscribe to our Newsletter</p>
 
-                    <!-- MESSAGE -->
-                    <div id="newsletter_message"></div>
+                    <div id="toast-container"></div>
 
                     <!-- FORM -->
                     <form id="newsletter_form" method="post" action="{% url 'newsletter' %}">
@@ -21,6 +20,7 @@
                                 placeholder="Enter your email"
                                 required
                                 style="background-color: #000000; color: #ffffff;"
+                                
                                 autocomplete="off"
                             >
                             <button
@@ -69,6 +69,5 @@
         </div>
     </div>
 </div>
-
 
 

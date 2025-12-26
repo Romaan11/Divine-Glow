@@ -3,7 +3,7 @@ from django.views.generic import TemplateView, View, FormView, ListView
 from django.contrib import messages
 from django import forms 
 from divine_app.forms import LoginForm, Service, AppointmentForm, ContactForm, NewsletterForm, SignupForm, OTPForm    
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseNotAllowed
 from divine_app.models import UserProfile, Appointment, Newsletter
 
 from django.contrib.auth.views import LoginView, LogoutView
@@ -237,44 +237,47 @@ class ContactView(LoginRequiredMixin, View):
 
 
 class NewsletterView(View):
-    def post(self,request):
-        is_ajax = request.headers.get("x-requested-with")
-        if is_ajax == "XMLHttpRequest":
-            form = NewsletterForm(request.POST)
 
-            email = request.POST.get("email")
-            
-            if Newsletter.objects.filter(email=email).exists():
-                return JsonResponse(
-                    {
-                        "success": False,
-                        "message": "You have already subscribed to the newsletter.",
-                    },
-                    status=400,
-                )
+    def get(self, request):
+        return HttpResponseNotAllowed(["POST"])
+        
 
-            if form.is_valid():
-                form.save()
-                return JsonResponse(
-                    {
-                    "success": True,
-                    "message": "Successfully subscribed to the newsletter.",
-                    },
-                    status=201,
-                )
-            else:
-                return JsonResponse(
-                    {
-                        "success": False,
-                        "message": "Cannot subscribe to the newsletter.",
-                    },
-                    status=400,
-                )
-        else:
+    def post(self, request):
+        if request.headers.get("X-Requested-With") != "XMLHttpRequest":
             return JsonResponse(
                 {
                     "success": False,
-                    "message": "Cannot process. Must be an AJAX XMLHttpRequest",
+                    "message": "Invalid request type.",
                 },
                 status=400,
             )
+
+        form = NewsletterForm(request.POST)
+        email = request.POST.get("email")
+
+        if Newsletter.objects.filter(email=email).exists():
+            return JsonResponse(
+                {
+                    "success": False,
+                    "message": "You have already subscribed to the newsletter.",
+                },
+                status=400,
+            )
+
+        if form.is_valid():
+            form.save()
+            return JsonResponse(
+                {
+                    "success": True,
+                    "message": "Successfully subscribed to the newsletter.",
+                },
+                status=201,
+            )
+
+        return JsonResponse(
+            {
+                "success": False,
+                "message": "Cannot subscribe to the newsletter.",
+            },
+            status=400,
+        )

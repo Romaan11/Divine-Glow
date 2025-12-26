@@ -26,19 +26,57 @@
     });
 
     //search
-    document.getElementById('searchButton').addEventListener('click', function() {
-        var searchContainer = document.querySelector('.search-container');
-        var searchInput = document.querySelector('.search-container input');
+    const searchBtn = document.getElementById('searchButton');
+    if (searchBtn) {
+        searchBtn.addEventListener('click', function() {
+            var searchContainer = document.querySelector('.search-container');
+            var searchInput = document.querySelector('.search-container input');
+            
         
-       
-        if (!searchContainer.classList.contains('open')) {
-            searchContainer.classList.add('open');  
-            searchInput.classList.add('open');  
-        } else {
-            searchContainer.classList.remove('open');  
-            searchInput.classList.remove('open');  
-        }
-    });
+            if (!searchContainer.classList.contains('open')) {
+                searchContainer.classList.add('open');  
+                searchInput.classList.add('open');  
+            } else {
+                searchContainer.classList.remove('open');  
+                searchInput.classList.remove('open');  
+            }
+        });
+    }
+
+    //Signup
+    function showToast(message) {
+        const container = document.getElementById("toast-container");
+        const toast = document.getElementById("toast-message");
+
+        toast.innerText = message;
+        container.style.display = "block";
+
+        // fade in
+        setTimeout(() => {
+            toast.style.opacity = "1";
+        }, 50);
+
+        // fade out after 4 seconds
+        setTimeout(() => {
+            toast.style.opacity = "0";
+            setTimeout(() => {
+                container.style.display = "none";
+            }, 500);
+        }, 4000);
+    }
+
+    const signupForm = document.getElementById('signupForm');
+    if (signupForm) {
+        signupForm.addEventListener('submit', function (event) {
+            const p1 = document.querySelector('[name="password1"]').value;
+            const p2 = document.querySelector('[name="password2"]').value;
+
+            if (p1 !== p2) {
+                event.preventDefault();
+                showToast("Passwords do not match!");
+            }
+        });
+    }
 
 
     // Back to top button
@@ -162,197 +200,221 @@ window.onload = function() {
 }
 
 // Form validation function
-document.getElementById('contactForm').addEventListener('submit', function(event) {
-    var isValid = true;
-    var errorMessages = [];
-    
-    // Check if all fields are filled
-    var fields = ['name', 'email', 'phone', 'subject', 'message'];
-    fields.forEach(function(field) {
-        var input = document.getElementById(field);
-        var errorPopup = input.nextElementSibling;
+const contactForm = document.getElementById('contactForm');
 
-        if (!input.value.trim()) {
-            isValid = false;
-            errorMessages.push(field.charAt(0).toUpperCase() + field.slice(1) + " is required.");
-            input.classList.add('is-invalid');
-            if (errorPopup){
-                errorPopup.style.display = 'flex';
-                errorPopup.classList.remove('hide');
-                
-                setTimeout(function() {
+if (contactForm) {
+    contactForm.addEventListener('submit', function (event) {
+
+        let isValid = true;
+        let errorMessages = [];
+
+        // Required fields
+        const fields = ['name', 'email', 'phone', 'subject', 'message'];
+
+        fields.forEach(function (field) {
+            const input = document.getElementById(field);
+            if (!input) return;
+
+            const errorPopup = input.nextElementSibling;
+
+            if (!input.value.trim()) {
+                isValid = false;
+                errorMessages.push(
+                    field.charAt(0).toUpperCase() + field.slice(1) + ' is required.'
+                );
+
+                input.classList.add('is-invalid');
+
+                if (errorPopup) {
+                    errorPopup.style.display = 'flex';
+                    errorPopup.classList.remove('hide');
+
+                    setTimeout(() => {
+                        errorPopup.classList.add('hide');
+                        setTimeout(() => {
+                            errorPopup.style.display = 'none';
+                        }, 300);
+                    }, 4000);
+                }
+            } else {
+                input.classList.remove('is-invalid');
+
+                if (errorPopup) {
                     errorPopup.classList.add('hide');
-                    setTimeout(function() {
-                        errorPopup.style.display = 'none'; 
-                    }, 300); 
-                }, 4000);
+                    setTimeout(() => {
+                        errorPopup.style.display = 'none';
+                    }, 300);
+                }
             }
-        } else{
-            input.classList.remove('is-invalid');
-            if (errorPopup) {
-                errorPopup.classList.add('hide'); 
-                setTimeout(function() {
-                    errorPopup.style.display = 'none'; 
-                }, 300); 
+        });
+
+        // PHONE VALIDATION
+        const phoneInput = document.getElementById('phone');
+        if (phoneInput) {
+            const phoneErrorPopup = phoneInput.nextElementSibling;
+            const phone = phoneInput.value.trim();
+
+            if (!/^(98|97)\d{8}$/.test(phone)) {
+                isValid = false;
+                errorMessages.push(
+                    'Phone number must start with 98 or 97 and be exactly 10 digits.'
+                );
+
+                phoneInput.classList.add('is-invalid');
+
+                if (phoneErrorPopup) {
+                    phoneErrorPopup.style.display = 'flex';
+                    phoneErrorPopup.classList.remove('hide');
+
+                    setTimeout(() => {
+                        phoneErrorPopup.classList.add('hide');
+                        setTimeout(() => {
+                            phoneErrorPopup.style.display = 'none';
+                        }, 300);
+                    }, 4000);
+                }
+            }
+        }
+
+        // EMAIL VALIDATION
+        const emailInput = document.getElementById('email');
+        if (emailInput) {
+            const emailErrorPopup = emailInput.nextElementSibling;
+            const email = emailInput.value.trim();
+
+            if (!/\S+@\S+\.\S+/.test(email)) {
+                isValid = false;
+                errorMessages.push('Enter a valid email address.');
+
+                emailInput.classList.add('is-invalid');
+
+                if (emailErrorPopup) {
+                    emailErrorPopup.style.display = 'flex';
+                    emailErrorPopup.classList.remove('hide');
+
+                    setTimeout(() => {
+                        emailErrorPopup.classList.add('hide');
+                        setTimeout(() => {
+                            emailErrorPopup.style.display = 'none';
+                        }, 300);
+                    }, 4000);
+                }
+            }
+        }
+
+        if (!isValid) {
+            event.preventDefault();
+
+            const popupMessage = document.getElementById('popupMessage');
+            const popupContent = document.getElementById('popupContent');
+
+            if (popupMessage && popupContent) {
+                popupContent.textContent = errorMessages.join(' ');
+                popupMessage.style.backgroundColor = 'red';
+                popupMessage.style.display = 'block';
+
+                setTimeout(() => {
+                    popupMessage.style.display = 'none';
+                }, 4000);
             }
         }
     });
+}
 
-    // Phone number validation (must start with 98 or 97, only 10 digits)
-    var phone = document.getElementById('phone').value;
-    var phoneErrorPopup = document.getElementById('phone').nextElementSibling;
-    if (!/^(98|97)\d{8}$/.test(phone)) {
-        isValid = false;
-        errorMessages.push('Phone no. must start with 98 or 97 and be exactly 10 digits.');
-        document.getElementById('phone').classList.add('is-invalid');
-        if (phoneErrorPopup) {
-            phoneErrorPopup.style.display = 'flex'; 
-            phoneErrorPopup.classList.remove('hide');
-            
-            setTimeout(function() {
-                phoneErrorPopup.classList.add('hide');
-                setTimeout(function() {
-                    phoneErrorPopup.style.display = 'none'; 
-                }, 300);
-            }, 4000);
-        }
-    } else {
-        if (phoneErrorPopup) {
-            phoneErrorPopup.classList.add('hide'); 
-            setTimeout(function() {
-                phoneErrorPopup.style.display = 'none';
-            }, 300); 
-        }
-    }
+document.querySelectorAll('input, textarea').forEach(function (input) {
+    input.addEventListener('input', function () {
+        const errorPopup = input.nextElementSibling;
 
-    // Email validation (checking if it contains @ symbol)
-    var email = document.getElementById('email').value;
-    var emailErrorPopup = document.getElementById('email').nextElementSibling;
-    if (!/\S+@\S+\.\S+/.test(email)) {
-        isValid = false;
-        errorMessages.push('Enter a valid email address.');
-        document.getElementById('email').classList.add('is-invalid');
-        if (emailErrorPopup) {
-            emailErrorPopup.style.display = 'flex'; 
-            emailErrorPopup.classList.remove('hide');
-            
-            setTimeout(function() {
-                emailErrorPopup.classList.add('hide');
-                setTimeout(function() {
-                    emailErrorPopup.style.display = 'none'; 
-                }, 300); 
-            }, 4000);
-        }
-    } else {
-        if (emailErrorPopup) {
-            emailErrorPopup.classList.add('hide'); 
-            setTimeout(function() {
-                emailErrorPopup.style.display = 'none'; 
-            }, 300); 
-        }
-    }
-
-    // Display error messages if form is invalid
-    if (!isValid) {
-        event.preventDefault();
-        var popupMessage = document.getElementById('popupMessage');
-        var popupContent = document.getElementById('popupContent');
-        popupContent.textContent = errorMessages.join(' ');
-        popupMessage.style.backgroundColor = "red"; 
-        popupMessage.style.display = "block";
-        setTimeout(function() {
-            popupMessage.style.display = "none";
-        }, 4000);
-    }
-});
-
-// Real-time error removal on input change
-document.querySelectorAll('input, textarea').forEach(function(input) {
-    input.addEventListener('input', function() {
-        var errorPopup = input.nextElementSibling; 
         if (input.classList.contains('is-invalid') && errorPopup) {
-            
             input.classList.remove('is-invalid');
             errorPopup.classList.add('hide');
-            setTimeout(function() {
-                errorPopup.style.display = 'none'; 
+
+            setTimeout(() => {
+                errorPopup.style.display = 'none';
             }, 300);
         }
     });
 });
 
-// Clicking the error icon to show the error message again
-document.querySelectorAll('.error-icon').forEach(function(icon) {
-    icon.addEventListener('click', function() {
-        var errorPopup = icon.parentElement; 
-        errorPopup.style.display = 'flex'; 
-        errorPopup.classList.remove('hide');
-    });
-});
-
-
-
-
-// Newsletter AJAX form submission
-document.getElementById("newsletter_form").addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    const form = this;
-    const formData = new FormData(form);
-    const messageDiv = document.getElementById("newsletter_message");
-
-    // Reset message styles
-    messageDiv.className = "";
-    messageDiv.style.display = "block";
-    messageDiv.style.opacity = "1";
-    messageDiv.style.maxHeight = "200px";
-    messageDiv.style.marginBottom = "14px";
-    messageDiv.style.transition = "all 0.4s ease";
-
-    fetch(form.action, {
-        method: "POST",
-        headers: {
-            "X-Requested-With": "XMLHttpRequest",
-        },
-        body: formData,
-    })
-    .then(response => response.json())
-    .then(data => {
-
-        if (data.success) {
-            messageDiv.classList.add("newsletter-success");
-            messageDiv.innerHTML = data.message;
-            form.reset();
-        } else {
-            messageDiv.classList.add("newsletter-error");
-            messageDiv.innerHTML = data.message;
+document.querySelectorAll('.error-icon').forEach(function (icon) {
+    icon.addEventListener('click', function () {
+        const errorPopup = icon.parentElement;
+        if (errorPopup) {
+            errorPopup.style.display = 'flex';
+            errorPopup.classList.remove('hide');
         }
-
-        
-        setTimeout(() => {
-            messageDiv.style.opacity = "0";
-            messageDiv.style.maxHeight = "0";
-            messageDiv.style.marginBottom = "0";
-
-            setTimeout(() => {
-                messageDiv.style.display = "none";
-            }, 400);
-        }, 4000);
-    })
-    .catch(() => {
-        messageDiv.classList.add("newsletter-error");
-        messageDiv.innerHTML = "Something went wrong!";
-
-        setTimeout(() => {
-            messageDiv.style.opacity = "0";
-            messageDiv.style.maxHeight = "0";
-            messageDiv.style.marginBottom = "0";
-
-            setTimeout(() => {
-                messageDiv.style.display = "none";
-            }, 400);
-        }, 4000);
     });
 });
 
 
+
+// Newsletter AJAX form submission 
+document.addEventListener("DOMContentLoaded", function () {
+
+    const form = document.getElementById("newsletter_form");
+    if (!form) return;
+
+    form.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(form);
+
+        fetch(form.action, {
+            method: "POST",
+            headers: {
+                "X-Requested-With": "XMLHttpRequest",
+                "X-CSRFToken": getCookie("csrftoken"),
+            },
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            showNewsletterToast(data.message, data.success ? "success" : "error");
+
+            if (data.success) {
+                form.reset();
+            }
+        })
+        .catch(() => {
+            showNewsletterToast("Something went wrong!", "error");
+        });
+    });
+});
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+        const cookies = document.cookie.split(";");
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.startsWith(name + "=")) {
+                cookieValue = decodeURIComponent(
+                    cookie.substring(name.length + 1)
+                );
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function showNewsletterToast(message, type) {
+
+    let container = document.getElementById("toast-container");
+    if (!container) {
+        container = document.createElement("div");
+        container.id = "toast-container";
+        document.body.appendChild(container);
+    }
+
+    const toast = document.createElement("div");
+    toast.className = `toast-message ${type === "success" ? "toast-success" : "toast-error"}`;
+    toast.textContent = message;
+
+    container.appendChild(toast);
+
+    setTimeout(() => {
+        toast.style.animation = "slideOut 0.4s ease forwards";
+        setTimeout(() => toast.remove(), 400);
+    }, 4000);
+}
