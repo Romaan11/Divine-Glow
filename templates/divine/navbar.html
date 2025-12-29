@@ -74,8 +74,8 @@
                         <a href="/" class="nav-item nav-link {% if request.path == '/' %}active{% endif %}">Home</a>
                         <a href="{% url 'about' %}" class="nav-item nav-link {% if request.path == '/about/' %}active{% endif %}">About</a>
                         <a href="{% url 'services' %}" class="nav-item nav-link {% if request.path == '/services/' %}active{% endif %}">Services</a>
-                        <a href="price.html" class="nav-item nav-link {% if request.path == '/price/' %}active{% endif %}">Price</a>
-                        <a href="gallery.html" class="nav-item nav-link {% if request.path == '/gallery/' %}active{% endif %}">Gallery</a>
+                        <a href="{% url 'price' %}" class="nav-item nav-link {% if request.path == '/price/' %}active{% endif %}">Price</a>
+                        <a href="{% url 'gallery' %}" class="nav-item nav-link {% if request.path == '/gallery/' %}active{% endif %}">Gallery</a>
                         <a href="{% url 'appointment' %}" class="nav-item nav-link {% if request.path == '/appointment/' %}active{% endif %}">Appointment</a>
                         <a href="{% url 'contact' %}" class="nav-item nav-link {% if request.path == '/contact/' %}active{% endif %}">Contact Us</a>
                     </div>

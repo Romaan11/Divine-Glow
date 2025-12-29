@@ -152,6 +152,12 @@ class ServiceView(ListView):
         if self.request.GET.get('all'):
             return qs
         return qs[:8]
+    
+class PriceView(TemplateView):
+    template_name = 'divine/price.html'
+
+class GalleryView(TemplateView):
+    template_name = 'divine/gallery.html' 
 
 class AppointmentView(LoginRequiredMixin, FormView):
     template_name = 'divine/appointment.html'

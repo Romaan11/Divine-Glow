@@ -1,10 +1,11 @@
 from django import forms
-from divine_app.models import Appointment,Contact, Newsletter, Service
+from divine_app.models import Appointment,Contact, Newsletter, Service, UserProfile
 from django.core.exceptions import ValidationError
 import re
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
+
 
 class SignupForm(forms.Form):
     email = forms.EmailField(
@@ -55,6 +56,8 @@ class SignupForm(forms.Form):
         phone = self.cleaned_data.get("phone")
         if not phone.startswith(('98','97')) or len(phone) != 10 or not phone.isdigit():
             raise ValidationError("Phone must start with 98 or 97 and be exactly 10 digits")
+        if UserProfile.objects.filter(phone=phone).exists():
+            raise ValidationError("Phone already registered")
         return phone
     
     # Validate email
@@ -97,6 +100,18 @@ class SignupForm(forms.Form):
 
         return cleaned_data
 
+OTP_CHOICES = (
+    ('email', 'Email'),
+    ('phone', 'Phone')
+)
+
+class OTPChoiceForm(forms.Form):
+    otp_method = forms.ChoiceField(
+        choices=OTP_CHOICES,
+        widget=forms.RadioSelect,
+        required=True,
+        initial='email'
+    )
 
 class OTPForm(forms.Form):
     otp = forms.CharField(
@@ -111,51 +126,96 @@ class OTPForm(forms.Form):
 
 
 class LoginForm(forms.Form):
-    email = forms.EmailField(
+    login = forms.CharField(
         required=True,
-        widget=forms.EmailInput(attrs={
+        widget=forms.TextInput(attrs={
             'class': 'custom-input',
-            'autocomplete': 'off', 
-            'placeholder': 'Email Address'
+            'placeholder': 'Email or Phone'
         })
     )
     password = forms.CharField(
         required=True,
-        widget=forms.PasswordInput(attrs={
-            'class': 'custom-input',
-            'autocomplete': 'off', 
-            'placeholder': 'Password'
-        })
+        widget=forms.PasswordInput(attrs={'class': 'custom-input'})
     )
-
-    def __init__(self, *args, **kwargs):
-        self.request = kwargs.pop('request', None) 
-        super().__init__(*args, **kwargs)
 
     def clean(self):
         cleaned_data = super().clean()
-        email = cleaned_data.get("email")
+        login_input = cleaned_data.get("login")
         password = cleaned_data.get("password")
 
-        
-        if email and password:
+        user = None
+
+        # Email login
+        if '@' in login_input:
             try:
-                user = User.objects.get(email=email)
+                u = User.objects.get(email=login_input)
+                user = authenticate(username=u.username, password=password)
             except User.DoesNotExist:
-                raise forms.ValidationError("Invalid email or password")
+                pass
+        # Phone login
+        else:
+            try:
+                profile = UserProfile.objects.get(phone=login_input)
+                user = authenticate(username=profile.user.username, password=password)
+            except UserProfile.DoesNotExist:
+                pass
 
-            self.user = authenticate(
-                username=user.username,
-                password=password
-            )
+        if user is None:
+            raise forms.ValidationError("Invalid login credentials")
 
-            if self.user is None:
-                raise forms.ValidationError("Invalid email or password")
-
+        self.user = user
         return cleaned_data
 
     def get_user(self):
         return self.user
+
+
+# class LoginForm(forms.Form):
+#     email = forms.EmailField(
+#         required=True,
+#         widget=forms.EmailInput(attrs={
+#             'class': 'custom-input',
+#             'autocomplete': 'off', 
+#             'placeholder': 'Enter Your Email Address or Phone Number'
+#         })
+#     )
+#     password = forms.CharField(
+#         required=True,
+#         widget=forms.PasswordInput(attrs={
+#             'class': 'custom-input',
+#             'autocomplete': 'off', 
+#             'placeholder': 'Password'
+#         })
+#     )
+
+#     def __init__(self, *args, **kwargs):
+#         self.request = kwargs.pop('request', None) 
+#         super().__init__(*args, **kwargs)
+
+#     def clean(self):
+#         cleaned_data = super().clean()
+#         email = cleaned_data.get("email")
+#         password = cleaned_data.get("password")
+
+        
+#         if email and password:
+#             try:
+#                 user = User.objects.get(email=email)
+#             except User.DoesNotExist:
+#                 raise forms.ValidationError("Invalid email or password")
+
+#             self.user = authenticate(
+#                 username=user.username,
+#                 password=password
+#             )
+
+#             if self.user is None:
+#                 raise forms.ValidationError("Invalid email or password")
+
+#         return cleaned_data
+
+#     def get_user(self):
+#         return self.user
 
 
 class AppointmentForm(forms.ModelForm):

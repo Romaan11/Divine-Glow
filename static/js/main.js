@@ -42,7 +42,7 @@
             }
         });
     }
-
+    
     //Signup
     function showToast(message) {
         const container = document.getElementById("toast-container");
