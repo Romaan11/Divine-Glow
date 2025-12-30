@@ -63,20 +63,21 @@
     <div class="container-fluid bg-light">
         <div class="container px-0">
             <nav class="navbar navbar-light navbar-expand-xl">
-                <a href="index.html" class="navbar-brand">
+                <a href="/" class="navbar-brand">
                     <h1 class="text-primary display-4">Divine Glow</h1>
                 </a>
                 <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
                     <span class="fa fa-bars text-primary"></span>
                 </button>
                 <div class="collapse navbar-collapse bg-light py-3" id="navbarCollapse">
-                    <div class="navbar-nav mx-auto border-top">
+                    <div class="navbar-nav ms-auto me-4 border-top">
                         <a href="/" class="nav-item nav-link {% if request.path == '/' %}active{% endif %}">Home</a>
                         <a href="{% url 'about' %}" class="nav-item nav-link {% if request.path == '/about/' %}active{% endif %}">About</a>
                         <a href="{% url 'services' %}" class="nav-item nav-link {% if request.path == '/services/' %}active{% endif %}">Services</a>
                         <a href="{% url 'price' %}" class="nav-item nav-link {% if request.path == '/price/' %}active{% endif %}">Price</a>
+                        <a href="{% url 'price' %}" class="nav-item nav-link {% if request.path == '/price/' %}active{% endif %}">Products</a>
                         <a href="{% url 'gallery' %}" class="nav-item nav-link {% if request.path == '/gallery/' %}active{% endif %}">Gallery</a>
-                        <a href="{% url 'appointment' %}" class="nav-item nav-link {% if request.path == '/appointment/' %}active{% endif %}">Appointment</a>
+                        {% comment %} <a href="{% url 'appointment' %}" class="nav-item nav-link {% if request.path == '/appointment/' %}active{% endif %}">Appointment</a> {% endcomment %}
                         <a href="{% url 'contact' %}" class="nav-item nav-link {% if request.path == '/contact/' %}active{% endif %}">Contact Us</a>
                     </div>
                     <div class="d-flex align-items-center flex-nowrap pt-xl-0">
@@ -88,10 +89,13 @@
                         </div>
 
                         <!-- Book Appointment Button -->
-                        <a href="{% url 'appointment' %}#appointment" class="btn btn-primary btn-primary-outline-0 rounded-pill py-3 px-4 ms-4">Book Appointment</a>
+                        <a href="{% url 'appointment' %}#appointment" class="btn btn-primary btn-primary-outline-0 rounded-pill py-3 px-3 ms-3">Book Appointment</a>
+
+                        <!-- Shopping Cart -->
+                        <a href="/" class="btn btn-primary btn-primary-outline-0 rounded-circle btn-lg-square ms-3 nav-cart"><i class="fas fa-shopping-cart"></i></a>
                     </div>
                 </div>
             </nav>
-        </div>
+        </div>  
     </div>
 </div>

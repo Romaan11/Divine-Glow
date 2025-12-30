@@ -309,11 +309,31 @@ input.custom-input {
 /*** Topbar End ***/
 
 /*** Navbar Start ***/
+.navbar,
+.navbar-collapse {
+    flex-wrap: nowrap !important;
+}
+
+.navbar-expand-xl .navbar-collapse {
+    display: flex !important;
+    align-items: center;
+}
+
+.navbar-nav.mx-auto {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 35px;
+    flex: 1;
+    min-width: 0;
+}
+
 .navbar .navbar-nav .nav-link {
-    padding: 10px 15px;
-    font-size: 16.5px;
-    font-weight: 800;
+    padding: 8px 10px;
+    font-size: 18px;
+    font-weight: 850;
     transition: .5s;
+    white-space: nowrap;
 }
 
 .navbar .navbar-nav .nav-link:hover,
@@ -355,7 +375,6 @@ input.custom-input {
     visibility: visible;
     background: var(--bs-light) !important;
     border-radius: 10px !important;
-    transition: .5s;
     opacity: 1;
 }
 
@@ -363,6 +382,18 @@ input.custom-input {
     .navbar .navbar-collapse .border-top {
         border-top: none !important;
     }
+}
+
+.navbar .d-flex.flex-nowrap {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-shrink: 0;
+}
+
+.navbar-brand {
+    margin-left: -65px; 
+    margin-right: 45px;
 }
 
 .search-container {
@@ -400,31 +431,40 @@ input.custom-input {
 
 .search-container.open {
     display: block;
-    width: 300px; /* Expand width when opened */
+    width: 300px;
     padding: 10px 20px;
 }
 
 .search-container input.open {
-    width: 250px;  /* Input expands when search is opened */
+    width: 250px;
 }
 
-
-/* Style the search button */
 #searchButton {
+    width: 44px;
+    height: 44px;
+    padding: 0;
     position: relative;
     z-index: 10;
     background-color: #FF99BB;
     border: none;
     cursor: pointer;
-    padding: 10px;
     border-radius: 50%;
 }
 
 #searchButton i {
-    color: white;  /* Make the icon white */
+    color: white;
 }
 
-/* Media query for responsiveness */
+.navbar .btn.rounded-pill {
+    padding: 10px 18px;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+body {
+    overflow-x: hidden;
+}
+
 @media (max-width: 992px) {
     .search-container {
         width: 100%;
@@ -432,11 +472,8 @@ input.custom-input {
         left: 0;
     }
 }
-
-/* #searchModal .modal-content {
-    background: rgba(250, 250, 250, .6);
-} */
 /*** Navbar End ***/
+
 
 /*** Carousel Start ***/
 .carousel-item {
@@ -509,25 +546,21 @@ input.custom-input {
 /*** Services Start ***/
 .services .services-item {
     transition: 0.5s;
-    border: none; /* reset default */
+    border: none;
 }
 
-/* LEFT cards → highlight on right */
 .services .services-item.service-left {
     border-right: 4px solid var(--bs-primary);
 }
 
-/* RIGHT cards → highlight on left */
 .services .services-item.service-right {
     border-left: 4px solid var(--bs-primary);
 }
 
-/* Hover background */
 .services .services-item:hover {
     background: var(--bs-primary) !important;
 }
 
-/* Hover border color stays aligned */
 .services .services-item:hover.service-left {
     border-right-color: var(--bs-secondary);
 }
@@ -536,29 +569,30 @@ input.custom-input {
     border-left-color: var(--bs-secondary);
 }
 
-/* Text color on hover */
 .services .services-item:hover .services-content p,
 .services .services-item:hover .services-content h3 {
     color: var(--bs-white);
     transition: 0.5s;
 }
 
-/* Button hover behavior */
 .services .services-item:hover .services-content a.btn {
     background: var(--bs-white);
     color: var(--bs-primary) !important;
+}
+
+.services .services-content a.btn:hover {
+    background: var(--bs-purple) !important;
+    color: var(--bs-white) !important;
 }
 
 .services .services-item:hover .services-content a.btn:hover {
     color: var(--bs-white) !important;
 }
 
-/* Image wrapper */
 .services .services-item .services-img {
     overflow: hidden;
 }
 
-/* Image animation */
 .services .services-item .services-img img {
     transition: 0.5s;
     max-height: 160px;
@@ -569,7 +603,6 @@ input.custom-input {
     transform: scale(1.3);
 }
 
-/* Content spacing */
 .services-content p {
     margin-bottom: 1rem;
 }
@@ -710,9 +743,6 @@ input.custom-input {
     border-radius: 10px;
 }
 
-/* ===============================
-   PLACEHOLDER COLOR
-   =============================== */
 /* .appointment .form-control::placeholder,
 textarea.form-control::placeholder,
 select.form-select::placeholder { */
@@ -722,9 +752,6 @@ select.form-select::placeholder { */
     opacity: 1;
 }
 
-/* ===============================
-   BASE INPUT STYLING
-   =============================== */
 .appointment-page input.form-control,
 .appointment-page textarea.form-control,
 .appointment-page select.form-select {
@@ -739,14 +766,14 @@ select.form-select::placeholder { */
 .appointment-page .popup-message {
     display: none;
     position: fixed;
-    top: 20px; /* Distance from the top */
-    right: 20px; /* Distance from the right */
-    width: 300px; /* Smaller width for the popup */
+    top: 20px; 
+    right: 20px;
+    width: 300px;
     padding: 15px;
-    background-color: red; /* Default background color for errors */
+    background-color: red; 
     color: white;
-    border-radius: 8px; /* Rounded corners */
-    z-index: 1050; /* Make sure it's on top of other content */
+    border-radius: 8px; 
+    z-index: 1050; 
     font-size: 16px;
     text-align: center;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
@@ -756,14 +783,10 @@ select.form-select::placeholder { */
     font-weight: bold;
 }
 
-/* Optional: Style for the invalid input fields */
 .is-invalid {
     border: 1px solid red;
 }
 
-/* ===============================
-   DROPDOWN OPTIONS
-   =============================== */
 select.form-select option {
     background-color: #3b2a2f;
     color: #ffffff;
@@ -774,9 +797,6 @@ select.form-select option:hover {
     color: #ffffff;
 }
 
-/* ===============================
-   DATE & TIME ICONS
-   =============================== */
 .appointment-page input[type="date"]::-webkit-calendar-picker-indicator,
 .appointment-page input[type="time"]::-webkit-calendar-picker-indicator {
     filter: invert(1);
@@ -784,9 +804,6 @@ select.form-select option:hover {
     cursor: pointer;
 }
 
-/* ===============================
-   FORCE WHITE TEXT (ALL STATES)
-   =============================== */
 .appointment-page input[type="text"],
 .appointment-page input[type="date"],
 .appointment-page input[type="time"] {
@@ -796,7 +813,6 @@ select.form-select option:hover {
     background-color: transparent !important;
 }
 
-/* Date internal fields */
 .appointment-page input[type="date"]::-webkit-datetime-edit,
 .appointment-page input[type="date"]::-webkit-datetime-edit-text,
 .appointment-page input[type="date"]::-webkit-datetime-edit-month-field,
@@ -805,7 +821,6 @@ select.form-select option:hover {
     color: #ffffff !important;
 }
 
-/* Time internal fields */
 .appointment-page input[type="time"]::-webkit-datetime-edit,
 .appointment-page input[type="time"]::-webkit-datetime-edit-text,
 .appointment-page input[type="time"]::-webkit-datetime-edit-hour-field,
@@ -813,16 +828,10 @@ select.form-select option:hover {
     color: #ffffff !important;
 }
 
-/* ===============================
-   EMPTY DATE APPEARANCE
-   =============================== */
 .appointment-page input[type="date"]:not(:focus):not(:valid) {
     color: rgba(255, 255, 255, 0.6) !important;
 }
 
-/* ===============================
-   FOCUS / HIGHLIGHT EFFECT
-   =============================== */
 .appointment-page input.form-control:focus,
 .appointment-page textarea.form-control:focus,
 .appointment-page select.form-select:focus,
@@ -837,18 +846,12 @@ select.form-select option:hover {
     caret-color: #ffffff;
 }
 
-/* ===============================
-   TEXT SELECTION
-   =============================== */
 .appointment-page input::selection,
 .appointment-page textarea::selection {
     background: #ff8fb3;
     color: #ffffff;
 }
 
-/* ===============================
-   REMOVE BROWSER AUTOFILL BG
-   =============================== */
 .appointment-page input:-webkit-autofill,
 .appointment-page input:-webkit-autofill:hover,
 .appointment-page input:-webkit-autofill:focus,
@@ -860,60 +863,35 @@ select.form-select option:hover {
     caret-color: #ffffff;
 }
 
-/* ===============================
-   SUCCESS / ERROR MESSAGES
-   =============================== */
-/* .success-message {
-    background-color: #28a745;
-    color: #ffffff;
-}
-
-.error-message {
-    background-color: #dc3545;
-    color: #ffffff; */
-/* } */
-
-/* ===============================
-   DATE ICONS
-   =============================== */
 .appointment-page input[type="date"]::-webkit-calendar-picker-indicator {
-    filter: invert(1) !important;  /* Ensures the icon is visible and white */
-    opacity: 1 !important;         /* Fully visible icon */
+    filter: invert(1) !important;  
+    opacity: 1 !important;       
     cursor: pointer;
 }
 
-/* ===============================
-   Date Input Styling
-   =============================== */
 .appointment-page input[type="date"] {
-    color: #ffffff !important;                /* White text inside the input field */
-    -webkit-text-fill-color: #ffffff !important;  /* Ensures text is white */
-    caret-color: #ffffff !important;           /* Ensure caret (cursor) is white */
-    background-color: transparent !important;  /* Keeps the background transparent */
+    color: #ffffff !important;                
+    -webkit-text-fill-color: #ffffff !important; 
+    caret-color: #ffffff !important;         
+    background-color: transparent !important;  
 }
 
-/* Placeholder styling for date input */
 .appointment-page input[type="date"]::placeholder {
-    color: #ffffff !important;  /* Placeholder text in white */
+    color: #ffffff !important;  
 }
 
-/* Date internal fields (month, day, year) */
 .appointment-page input[type="date"]::-webkit-datetime-edit,
 .appointment-page input[type="date"]::-webkit-datetime-edit-text,
 .appointment-page input[type="date"]::-webkit-datetime-edit-month-field,
 .appointment-page input[type="date"]::-webkit-datetime-edit-day-field,
 .appointment-page input[type="date"]::-webkit-datetime-edit-year-field {
-    color: #ffffff !important;  /* White for month, day, year inside the field */
+    color: #ffffff !important; 
 }
 
-/* Styling when the date is empty */
 .appointment-page input[type="date"]:not(:focus):not(:valid) {
-    color: rgba(255, 255, 255, 0.6) !important;  /* Light white text when the date is empty */
+    color: rgba(255, 255, 255, 0.6) !important; 
 }
 
-/* ===============================
-   Forcing white text on all input fields
-   =============================== */
 .appointment-page input[type="text"], input[type="date"], input[type="time"] {
     color: #ffffff !important;
     -webkit-text-fill-color: #ffffff !important;
@@ -921,9 +899,6 @@ select.form-select option:hover {
     background-color: transparent !important;
 }
 
-/* ===============================
-   FOCUS / HIGHLIGHT EFFECT
-   =============================== */
 .appointment-page input[type="date"]:focus {
     background-color: rgba(255, 255, 255, 0.06) !important;
     border-color: #ff8fb3 !important;
@@ -934,34 +909,29 @@ select.form-select option:hover {
     caret-color: #ffffff;
 }
 
-/* Ensure the calendar icon is white */
 .appointment-page input[type="date"]::-webkit-calendar-picker-indicator {
-    filter: invert(1) !important; /* Invert the icon to make it white */
-    opacity: 1 !important;        /* Ensure the icon is fully visible */
-    cursor: pointer;             /* Make the icon clickable */
+    filter: invert(1) !important;
+    opacity: 1 !important;      
+    cursor: pointer;            
 }
 
-/* Style the flatpickr calendar background to white */
 .flatpickr-calendar {
-    background-color: white !important; /* Set the background of the calendar to white */
-    color: #3b2a2f; /* Dark text color for visibility */
+    background-color: white !important; 
+    color: #3b2a2f;
     border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); /* Light shadow for a better effect */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); 
 }
 
-/* Style the selected date */
 .flatpickr-day.selected {
-    background-color: #ff8fb3 !important; /* Highlight selected date */
+    background-color: #ff8fb3 !important; 
     color: white !important;
 }
 
-/* Style the hover effect for dates */
 .flatpickr-day:hover {
     background-color: rgba(255, 143, 179, 0.5) !important;
     color: white !important;
 }
 
-/* Style the month and year selector */
 .flatpickr-monthDropdown-months {
     background-color: #fff;
     color: #3b2a2f;
@@ -1235,8 +1205,6 @@ select.form-select option:hover {
     color: #000000 !important;
 }
 
-
-/* Focus Styles for Input and Textarea in the Contact Form */
 .contact-page .contact-form input.form-control:focus,
 .contact-page .contact-form textarea.form-control:focus {
     background-color: #e3f3ff !important;
@@ -1244,13 +1212,11 @@ select.form-select option:hover {
     color: #000000 !important;
 }
 
-/* Non-Focus State (default styling for inputs and textareas) */
 .contact-page .contact-form input.form-control:not(:focus),
 .contact-page .contact-form textarea.form-control:not(:focus) {
     color: #000000 !important;
 }
 
-/* Ensure white text, transparent background for Contact page */
 .contact-page input.form-control,
 .contact-page textarea.form-control {
     color: #000000 !important;
@@ -1273,7 +1239,6 @@ select.form-select option:hover {
     caret-color: #000000;
 }
 
-/* Style for error pop-up */
 .error-popup {
     display: none;
     position: absolute;
@@ -1306,14 +1271,12 @@ select.form-select option:hover {
     flex: 1;
 }
 
-/* Show error message when input is invalid */
 input.is-invalid + .error-popup, 
 textarea.is-invalid + .error-popup {
     display: flex;
     opacity: 1;
 }
 
-/* Hide error after a brief period */
 .error-popup.hide {
     opacity: 0;
     transition: opacity 3s ease-in-out;
@@ -1321,25 +1284,24 @@ textarea.is-invalid + .error-popup {
 
 input.is-invalid, 
 textarea.is-invalid {
-    border-color: #f5c6cb; /* Error border color */
+    border-color: #f5c6cb; 
 }
 
 .error-icon {
-    cursor: pointer; /* Make the error icon clickable */
+    cursor: pointer; 
 }
 
-/* Popup in Contact */
 .contact-page .popup-message {
     display: none;
     position: fixed;
-    top: 20px; /* Distance from the top */
-    right: 20px; /* Distance from the right */
-    width: 300px; /* Smaller width for the popup */
+    top: 20px; 
+    right: 20px; 
+    width: 300px; 
     padding: 15px;
-    background-color: red; /* Default background color for errors */
+    background-color: red; 
     color: white;
-    border-radius: 8px; /* Rounded corners */
-    z-index: 1050; /* Make sure it's on top of other content */
+    border-radius: 8px;
+    z-index: 1050;
     font-size: 16px;
     text-align: center;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
@@ -1354,7 +1316,49 @@ textarea.is-invalid {
     border: 1px solid red;
 }
 
+/* .contact-page {
+    background: #FF99BB !important;
+} */
+
+.contact-page iframe {
+    background: #ffffff;
+}
+
+.contact-page .col-12 .rounded {
+    background: #ffffff;
+    padding: 12px;
+    border-radius: 12px;
+}
+
+.contact-page .rounded iframe {
+    border-radius: 8px 8px 0 0;
+}
+
+.contact-page .container-fluid.pb-5 {
+    background: #ffffff;
+    border-radius: 16px;
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+}
+
+.contact-page > .container > .row > .container-fluid.pb-5 {
+    background: #ffffff;
+    border-radius: 20px;
+    margin-top: 4rem;
+}
+
+/* Remove pink gaps inside */
+.contact-page > .container > .row > .container-fluid.pb-5 .container {
+    background: #ffffff;
+}
+
+/* Ensure map wrapper blends with white section */
+.contact-page > .container > .row > .container-fluid.pb-5 .rounded {
+    background: #ffffff;
+}
+
 /*** Contact End ***/
+
 
 /*** footer start ***/
 .footer {
@@ -1386,7 +1390,6 @@ textarea.is-invalid {
     padding: 6px;
 }
 
-/* Input */
 .newsletter-input {
     border: 0;
     color: #000000;
@@ -1417,16 +1420,14 @@ textarea.is-invalid {
     transition: all 0.3s ease;
 }
 
-/* Hover effect */
 .newsletter-btn:hover {
-    background-color: #6f42c1; /* keep same color */
+    background-color: #6f42c1; 
     border-color: #6f42c1;
     color: #fff;
     transform: translateY(-2px);
     box-shadow: 0 8px 18px rgba(111, 66, 193, 0.45);
 }
 
-/* Focus (keyboard / click) */
 .newsletter-btn:focus:not(:hover),
 .newsletter-btn:active:not(:hover) {
     background-color: #FF99BB;
@@ -1462,7 +1463,6 @@ textarea.is-invalid {
     background-color: #dc3545;
 }
 
-/* Animations */
 @keyframes slideIn {
     to {
         opacity: 1;

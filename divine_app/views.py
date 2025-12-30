@@ -21,22 +21,22 @@ class UserLoginView(LoginView):
     # success_url = reverse_lazy('home')
     redirect_authenticated_user = True
 
-    def form_valid(self, form):
-        login(self.request, form.get_user())
-        return super().form_valid(form)
-
-    def get_success_url(self):
-        return reverse_lazy('home')
-
     # def form_valid(self, form):
-    #     # Login user after successful authentication
-    #     user = form.get_user()
-    #     login(self.request, user)
+    #     login(self.request, form.get_user())
     #     return super().form_valid(form)
 
-    # def get_success_url(self):  
-    #     # Redirect to home after successful login
+    # def get_success_url(self):
     #     return reverse_lazy('home')
+
+    def form_valid(self, form):
+        # Login user after successful authentication
+        user = form.get_user()
+        login(self.request, user)
+        return super().form_valid(form)
+
+    def get_success_url(self):  
+        # Redirect to home after successful login
+        return reverse_lazy('home')
 
 class UserSignupView(FormView):
     template_name = 'registration/signup.html'

@@ -100,18 +100,18 @@ class SignupForm(forms.Form):
 
         return cleaned_data
 
-OTP_CHOICES = (
-    ('email', 'Email'),
-    ('phone', 'Phone')
-)
+# OTP_CHOICES = (
+#     ('email', 'Email'),
+#     ('phone', 'Phone')
+# )
 
-class OTPChoiceForm(forms.Form):
-    otp_method = forms.ChoiceField(
-        choices=OTP_CHOICES,
-        widget=forms.RadioSelect,
-        required=True,
-        initial='email'
-    )
+# class OTPChoiceForm(forms.Form):
+#     otp_method = forms.ChoiceField(
+#         choices=OTP_CHOICES,
+#         widget=forms.RadioSelect,
+#         required=True,
+#         initial='email'
+#     )
 
 class OTPForm(forms.Form):
     otp = forms.CharField(
@@ -125,97 +125,97 @@ class OTPForm(forms.Form):
     )
 
 
-class LoginForm(forms.Form):
-    login = forms.CharField(
-        required=True,
-        widget=forms.TextInput(attrs={
-            'class': 'custom-input',
-            'placeholder': 'Email or Phone'
-        })
-    )
-    password = forms.CharField(
-        required=True,
-        widget=forms.PasswordInput(attrs={'class': 'custom-input'})
-    )
-
-    def clean(self):
-        cleaned_data = super().clean()
-        login_input = cleaned_data.get("login")
-        password = cleaned_data.get("password")
-
-        user = None
-
-        # Email login
-        if '@' in login_input:
-            try:
-                u = User.objects.get(email=login_input)
-                user = authenticate(username=u.username, password=password)
-            except User.DoesNotExist:
-                pass
-        # Phone login
-        else:
-            try:
-                profile = UserProfile.objects.get(phone=login_input)
-                user = authenticate(username=profile.user.username, password=password)
-            except UserProfile.DoesNotExist:
-                pass
-
-        if user is None:
-            raise forms.ValidationError("Invalid login credentials")
-
-        self.user = user
-        return cleaned_data
-
-    def get_user(self):
-        return self.user
-
-
 # class LoginForm(forms.Form):
-#     email = forms.EmailField(
+#     login = forms.CharField(
 #         required=True,
-#         widget=forms.EmailInput(attrs={
+#         widget=forms.TextInput(attrs={
 #             'class': 'custom-input',
-#             'autocomplete': 'off', 
-#             'placeholder': 'Enter Your Email Address or Phone Number'
+#             'placeholder': 'Email or Phone'
 #         })
 #     )
 #     password = forms.CharField(
 #         required=True,
-#         widget=forms.PasswordInput(attrs={
-#             'class': 'custom-input',
-#             'autocomplete': 'off', 
-#             'placeholder': 'Password'
-#         })
+#         widget=forms.PasswordInput(attrs={'class': 'custom-input'})
 #     )
-
-#     def __init__(self, *args, **kwargs):
-#         self.request = kwargs.pop('request', None) 
-#         super().__init__(*args, **kwargs)
 
 #     def clean(self):
 #         cleaned_data = super().clean()
-#         email = cleaned_data.get("email")
+#         login_input = cleaned_data.get("login")
 #         password = cleaned_data.get("password")
 
-        
-#         if email and password:
+#         user = None
+
+#         # Email login
+#         if '@' in login_input:
 #             try:
-#                 user = User.objects.get(email=email)
+#                 u = User.objects.get(email=login_input)
+#                 user = authenticate(username=u.username, password=password)
 #             except User.DoesNotExist:
-#                 raise forms.ValidationError("Invalid email or password")
+#                 pass
+#         # Phone login
+#         else:
+#             try:
+#                 profile = UserProfile.objects.get(phone=login_input)
+#                 user = authenticate(username=profile.user.username, password=password)
+#             except UserProfile.DoesNotExist:
+#                 pass
 
-#             self.user = authenticate(
-#                 username=user.username,
-#                 password=password
-#             )
+#         if user is None:
+#             raise forms.ValidationError("Invalid login credentials")
 
-#             if self.user is None:
-#                 raise forms.ValidationError("Invalid email or password")
-
+#         self.user = user
 #         return cleaned_data
 
 #     def get_user(self):
 #         return self.user
+
+
+class LoginForm(forms.Form):
+    email = forms.EmailField(
+        required=True,
+        widget=forms.EmailInput(attrs={
+            'class': 'custom-input',
+            'autocomplete': 'off', 
+            'placeholder': 'Enter Your Email Address'
+        })
+    )
+    password = forms.CharField(
+        required=True,
+        widget=forms.PasswordInput(attrs={
+            'class': 'custom-input',
+            'autocomplete': 'off', 
+            'placeholder': 'Password'
+        })
+    )
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None) 
+        super().__init__(*args, **kwargs)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        email = cleaned_data.get("email")
+        password = cleaned_data.get("password")
+
+        
+        if email and password:
+            try:
+                user = User.objects.get(email=email)
+            except User.DoesNotExist:
+                raise forms.ValidationError("Invalid email or password")
+
+            self.user = authenticate(
+                username=user.username,
+                password=password
+            )
+
+            if self.user is None:
+                raise forms.ValidationError("Invalid email or password")
+
+        return cleaned_data
+
+    def get_user(self):
+        return self.user
 
 
 class AppointmentForm(forms.ModelForm):

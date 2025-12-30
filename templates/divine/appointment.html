@@ -22,7 +22,7 @@
                     <p class="fs-4 text-uppercase text-primary">Get In Touch</p>
                     <h1 class="display-4 mb-4 text-white">Get Appointment</h1>
 
-                    <!-- Popup Message (success/error) -->
+                    <!-- Popup Message -->
                     <div id="popupMessage" class="popup-message">
                         <div id="popupContent" class="popup-content"></div>
                     </div>
@@ -134,24 +134,20 @@
     {% for message in messages %}
         <script>
             document.addEventListener("DOMContentLoaded", function() {
-                // Popup Message Logic
+                
                 var popupMessage = document.getElementById('popupMessage');
                 var popupContent = document.getElementById('popupContent');
                 
-                // Set the message text dynamically
                 popupContent.textContent = "{{ message }}";
 
-                // Set the background color based on message type
                 if ("{{ message.tags }}" === "success") {
-                    popupMessage.style.backgroundColor = "green";  // Green for success
+                    popupMessage.style.backgroundColor = "green";
                 } else if ("{{ message.tags }}" === "error") {
-                    popupMessage.style.backgroundColor = "red";  // Red for error
+                    popupMessage.style.backgroundColor = "red"; 
                 }
 
-                // Show the popup
                 popupMessage.style.display = "block";
                 
-                // Hide the popup after 4 seconds
                 setTimeout(function() {
                     popupMessage.style.display = "none";
                 }, 4000);
@@ -225,10 +221,10 @@ fetch("{% url 'booked_slots' %}")
             var popupMessage = document.getElementById('popupMessage');
             var popupContent = document.getElementById('popupContent');
             popupContent.textContent = errorMessages.join(' ');
-            popupMessage.style.backgroundColor = "red"; // Red for error messages
-            popupMessage.style.display = "block"; // Show popup
+            popupMessage.style.backgroundColor = "red"; 
+            popupMessage.style.display = "block"; 
             setTimeout(function() {
-                popupMessage.style.display = "none"; // Hide popup after 4 seconds
+                popupMessage.style.display = "none";
             }, 4000);
         }
     });
