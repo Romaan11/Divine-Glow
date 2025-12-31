@@ -1,13 +1,13 @@
-{% comment %} {% extends 'base.html' %} {% endcomment %}
+{% load static %}
 
 <div class="container-fluid about py-5">
     <div class="container py-5">
         <div class="row g-5 align-items-center">
             <div class="col-lg-5">
                 <div class="video">
-                    <img src="img/about-1.jpg" class="img-fluid rounded" alt="">
+                    <img src="{% static 'img/about-1.jpg' %}" class="img-fluid rounded" alt="">
                     <div class="position-absolute rounded border-5 border-top border-start border-white" style="bottom: 0; right: 0;;">
-                        <img src="img/about-2.jpg" class="img-fluid rounded" alt="">
+                        <img src="{% static 'img/about-2.jpg' %}" class="img-fluid rounded" alt="">
                     </div>
                     <button type="button" class="btn btn-play" data-bs-toggle="modal" data-src="https://www.youtube.com/embed/DWRcNpR6Kdc" data-bs-target="#videoModal">
                         <span></span>

@@ -236,7 +236,8 @@ class AppointmentForm(forms.ModelForm):
                 'class': 'form-control py-3 border-white bg-transparent text-white',
                 'placeholder': 'Phone No.',
                 'maxlength': '10',
-                'pattern': '(98|97)[0-9]{8}',  
+                'pattern': '(98|97)[0-9]{8}',
+                'inputmode': 'numeric',  
                 'title': 'Phone no must start with 98 or 97 and be exactly 10 digits'
             }),
             'preferred_date': forms.DateInput(attrs={

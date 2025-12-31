@@ -138,8 +138,19 @@ class UserLogoutView(View):
 class HomeView(TemplateView):
     template_name = 'divine/home.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['services'] = Service.objects.all()[:8] 
+    
+        context['about_content'] = "Welcome to Divine Glow! We offer premium beauty services to make you shine."
+
+        context['form'] = AppointmentForm()
+
+        return context
+
 class AboutView(TemplateView):
     template_name = 'divine/about.html'
+
 
 class ServiceView(ListView):
     model = Service

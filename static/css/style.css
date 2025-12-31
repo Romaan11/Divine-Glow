@@ -1316,9 +1316,9 @@ textarea.is-invalid {
     border: 1px solid red;
 }
 
-/* .contact-page {
+.contact-page {
     background: #FF99BB !important;
-} */
+}
 
 .contact-page iframe {
     background: #ffffff;
@@ -1339,22 +1339,6 @@ textarea.is-invalid {
     border-radius: 16px;
     padding-top: 3rem;
     padding-bottom: 3rem;
-}
-
-.contact-page > .container > .row > .container-fluid.pb-5 {
-    background: #ffffff;
-    border-radius: 20px;
-    margin-top: 4rem;
-}
-
-/* Remove pink gaps inside */
-.contact-page > .container > .row > .container-fluid.pb-5 .container {
-    background: #ffffff;
-}
-
-/* Ensure map wrapper blends with white section */
-.contact-page > .container > .row > .container-fluid.pb-5 .rounded {
-    background: #ffffff;
 }
 
 /*** Contact End ***/
