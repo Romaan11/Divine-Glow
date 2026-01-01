@@ -1091,6 +1091,12 @@ select.form-select option:hover {
     overflow: hidden;
 }
 
+.team .row {
+    display: flex;              
+    justify-content: center;  
+    align-items: center;         
+}
+
 .team .team-item .team-text {
     background: var(--bs-primary);
 }
