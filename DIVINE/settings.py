@@ -142,3 +142,4 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # EMAIL_HOST_USER = 'your_email@gmail.com'
 # EMAIL_HOST_PASSWORD = 'your_app_password'
 
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'

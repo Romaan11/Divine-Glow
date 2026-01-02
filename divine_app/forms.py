@@ -1,5 +1,5 @@
 from django import forms
-from divine_app.models import Appointment,Contact, Newsletter, Service, UserProfile
+from divine_app.models import Appointment,Contact, Newsletter, Service, UserProfile, FeedBack
 from django.core.exceptions import ValidationError
 import re
 from django.contrib.auth.forms import AuthenticationForm
@@ -318,6 +318,38 @@ class ContactForm(forms.ModelForm):
         if "@" not in email or "." not in email.split("@")[-1]:
             raise ValidationError("Enter a valid email address.")
         return email
+
+class FeedBackForm(forms.ModelForm):
+    class Meta:
+        model = FeedBack
+        fields = ['name', 'image', 'message', 'rating']
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'placeholder': 'Full Name',
+                'class': 'form-control',
+                'autocomplete': 'off',
+                'required': 'required',
+            }),
+            'message': forms.Textarea(attrs={
+                'placeholder': 'Write your message here...',
+                'class': 'form-control',
+                'autocomplete': 'off',
+                'required': 'required',
+            }),
+            'image': forms.ClearableFileInput(attrs={
+                'class': 'form-control',
+                'required': 'required',
+            }),
+            'rating': forms.RadioSelect(attrs={
+                'required': 'required', 
+            })
+        }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if not cleaned_data.get('name') or not cleaned_data.get('message') or not cleaned_data.get('rating') or not cleaned_data.get('image'):
+            raise forms.ValidationError('All fields are required!')
+        return cleaned_data
 
 
 class NewsletterForm(forms.ModelForm):

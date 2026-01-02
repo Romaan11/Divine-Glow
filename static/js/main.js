@@ -353,6 +353,7 @@ document.querySelectorAll('.error-icon').forEach(function (icon) {
     });
 });
 
+// Feedback Form
 
 
 // Newsletter AJAX form submission 

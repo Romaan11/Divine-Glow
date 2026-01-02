@@ -365,9 +365,21 @@ input.custom-input {
     }
 }
 
+.dropdown .dropdown-menu a{
+    background-color: transparent;
+    color: #000;
+    font-weight: 850 !important;
+}
+
 .dropdown .dropdown-menu a:hover {
-    background: var(--bs-secondary);
-    color: var(--bs-primary);
+    background-color: transparent;
+    color: #FF99BB;
+}
+
+.dropdown .dropdown-menu .active {
+    background-color: transparent;
+    color: #FF99BB;  
+    font-weight: 850 !important;
 }
 
 .navbar .nav-item:hover .dropdown-menu {
@@ -1487,4 +1499,222 @@ textarea.is-invalid {
     cursor: not-allowed;
 }
 
+/* Feedback Form */
+.feedback-img {
+    position: relative; 
+    min-height: 100vh;
+    background: url("/static/img/feedback-image.jpeg") center/cover no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+}
 
+.feedback-img::before {
+    content: ''; 
+    position: absolute; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 1; 
+}
+
+.feedback-container {
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 20px;
+    width: 100%;
+    max-width: 600px;
+    color: #fff;
+    z-index: 2;
+}
+
+.subtitle {
+    color: #FF99BB;
+    letter-spacing: 2px;
+    font-size: 21px;
+    margin-bottom: 10px;
+}
+
+.title {
+    color: #FFFFFF;
+    font-size: 42px;
+    margin-bottom: 30px;
+    font-weight: bold;
+}
+
+.feedback-form input,
+.feedback-form textarea,
+.feedback-form select {
+    width: 100%;
+    background: transparent;
+    border: 1px solid #fff;
+    border-radius: 8px;
+    padding: 10px 12px;
+    color: #fff;
+    font-size: 15px;
+    outline: none;
+    transition: 0.3s ease;
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.feedback-form ::placeholder {
+    color: #ddd;
+}
+
+.feedback-form input:focus,
+.feedback-form textarea:focus,
+.feedback-form select:focus {
+    border-color: #FF99BB;
+    box-shadow: 0 0 0 2px rgba(136, 76, 210, 0.6);
+    background: transparent !important;
+    color: #fff;
+}
+
+.feedback-form input:-webkit-autofill,
+.feedback-form textarea:-webkit-autofill,
+.feedback-form select:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
+    -webkit-text-fill-color: #fff !important;
+    transition: background-color 9999s ease-in-out 0s;
+}
+
+.feedback-form textarea {
+    min-height: 120px;
+    resize: none;
+}
+
+.rating-group ul {
+    list-style: none;
+    display: flex;
+    gap: 12px;
+    padding: 0;
+}
+
+.rating-group input[type="radio"] {
+    display: none;
+}
+
+.rating-group label {
+    padding: 8px 14px;
+    border: 1px solid #fff;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.rating-group input[type="radio"]:checked + label {
+    background: linear-gradient(135deg, #FF99BB, #884CD2);
+    border-color: transparent;
+}
+
+.submit-btn {
+    width: 100%;
+    border: none;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #FF99BB, #884CD2);
+    color: #000;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.submit-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+.feedback-form input[type="file"] {
+    width: 100%;
+    background: transparent;
+    border: 1px solid #fff;
+    border-radius: 8px;
+    padding: 10px 15px;
+    color: #ddd;
+    outline: none;
+}
+
+.feedback-form input[type="file"]:focus {
+    background: transparent;
+    border-color: #FF99BB;
+    box-shadow: 0 0 0 2px rgba(136, 76, 210, 0.6);
+}
+
+.feedback-form input[type="file"]::file-selector-button {
+    background: linear-gradient(135deg, #FF99BB, #884CD2);
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    color: #000;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.star-rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-start;
+    gap: 8px;
+}
+
+.star-rating input {
+    display: none;
+}
+
+.star-rating label {
+    font-size: 28px;
+    color: #555;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+    color: #FF99BB;
+}
+
+.star-rating input:checked ~ label {
+    color: #FF99BB;
+}
+
+.popup-message {
+    display: none; 
+    position: fixed;  
+    top: -35px;       
+    right: -450px;    
+    background-color: #4CAF50; 
+    color: white;
+    padding: 22px;
+    font-size: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(133, 67, 67, 0.2);
+    z-index: 9999;     
+    text-align: center;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.success-popup {
+    background-color: green;
+}
+
+.error-popup {
+    background-color: red;
+}
+
+@media (max-width: 768px) {
+    .title {
+        font-size: 32px;
+    }
+
+    .feedback-container {
+        padding: 30px;
+    }
+}

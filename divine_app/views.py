@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import TemplateView, View, FormView, ListView
+from django.views.generic import TemplateView, View, FormView, ListView, CreateView
 from django.contrib import messages
 from django import forms 
-from divine_app.forms import LoginForm, Service, AppointmentForm, ContactForm, NewsletterForm, SignupForm, OTPForm    
+from divine_app.forms import FeedBackForm, LoginForm, Service, AppointmentForm, ContactForm, NewsletterForm, SignupForm, OTPForm    
 from django.http import JsonResponse, HttpResponseNotAllowed
-from divine_app.models import UserProfile, Appointment, Newsletter
+from divine_app.models import UserProfile, Appointment, Newsletter, FeedBack
 
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
@@ -252,9 +252,29 @@ class ContactView(LoginRequiredMixin, View):
             return render(request, self.template_name, {'form': form})
             
 
+class FeedBackCreateView(LoginRequiredMixin, CreateView):
+    model = FeedBack
+    form_class = FeedBackForm
+    template_name = 'divine/feedback_form.html'
+    login_url = 'login'
+    redirect_field_name = 'next'
+
+    def get_success_url(self):
+        return reverse_lazy('feedback-form')
+
+    def form_valid(self, form):
+        # Adding success message to the context
+        messages.success(self.request, 'Thank you for your feedback!')
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        # Adding error message to the context
+        messages.error(self.request, 'All fields are required!')
+        return self.render_to_response(self.get_context_data(form=form))
+
+
 
 class NewsletterView(View):
-
     def get(self, request):
         return HttpResponseNotAllowed(["POST"])
         

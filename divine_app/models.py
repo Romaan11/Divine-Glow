@@ -3,6 +3,7 @@ from divine_app.validators import max_20_words
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 class TimeStampModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
@@ -75,6 +76,21 @@ class Contact(TimeStampModel):
 
     def __str__(self):
         return self.name
+    
+class FeedBack(TimeStampModel):
+    RATING_CHOICES = [(i, str(i)) for i in range(1,6)]
+    name = models.CharField(max_length= 100)
+    image = models.ImageField(upload_to='feedback/%Y/%m/%d',null=True, blank=True)
+    message = models.TextField()
+    rating = models.IntegerField(
+        choices=RATING_CHOICES,
+        validators=[MinValueValidator(1), MaxValueValidator(5)],
+        default=5,
+        help_text="Rate from 1 to 5"
+    )
+
+    def __str__(self):
+        return f"{self.name} - {self.rating} stars"
     
 class Newsletter(TimeStampModel):
     email = models.EmailField(unique=True)
