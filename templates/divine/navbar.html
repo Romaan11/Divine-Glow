@@ -75,10 +75,22 @@
                         <a href="{% url 'about' %}" class="nav-item nav-link {% if request.path == '/about/' %}active{% endif %}">About</a>
                         <a href="{% url 'services' %}" class="nav-item nav-link {% if request.path == '/services/' %}active{% endif %}">Services</a>
                         <a href="{% url 'price' %}" class="nav-item nav-link {% if request.path == '/price/' %}active{% endif %}">Price</a>
-                        <a href="{% url 'price' %}" class="nav-item nav-link {% if request.path == '/price/' %}active{% endif %}">Shop</a>
+                        <a href="{% url 'price' %}" class="nav-item nav-link {% if request.path == '/price/' %}active{% endif %}">Products</a>
                         <a href="{% url 'gallery' %}" class="nav-item nav-link {% if request.path == '/gallery/' %}active{% endif %}">Gallery</a>
                         {% comment %} <a href="{% url 'appointment' %}" class="nav-item nav-link {% if request.path == '/appointment/' %}active{% endif %}">Appointment</a> {% endcomment %}
                         <a href="{% url 'contact' %}" class="nav-item nav-link {% if request.path == '/contact/' %}active{% endif %}">Contact Us</a>
+                        
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle {% if request.path == '/feedback/' %}active{% endif %}"
+                               data-bs-toggle="dropdown">
+                                Others
+                            </a>
+                            <div class="dropdown-menu rounded-0 m-0">
+                                <a href="{% url 'feedback-form' %}" class="dropdown-item {% if request.path == '/feedback/' %}active{% endif %}">
+                                    Feedback Form
+                                </a>
+                            </div>
+                        </div>
                     </div>
                     <div class="d-flex align-items-center flex-nowrap pt-xl-0">
                         <!-- Search Button and Input -->

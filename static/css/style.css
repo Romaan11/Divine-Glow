@@ -549,13 +549,20 @@ body {
 
 
 .bg-breadcrumb {
-    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(../img/appointment-background.jpg);
+    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(../img/services.jpeg);
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
 }
 
 /*** Services Start ***/
+#services {
+    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(../img/services.jpeg);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
 .services .services-item {
     transition: 0.5s;
     border: none;
@@ -626,6 +633,13 @@ body {
 
 /*** About Start ***/
 /*** Youtube Video start ***/
+#about {
+    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(../img/about1.jpg);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
 .video {
     position: relative;
     padding-right: 70px; 
