@@ -1514,6 +1514,13 @@ textarea.is-invalid {
 }
 
 /* Feedback Form */
+#feedback {
+    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(../img/feedback-bg.png);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
 .feedback-img {
     position: relative; 
     min-height: 100vh;

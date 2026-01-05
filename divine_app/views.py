@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import TemplateView, View, FormView, ListView, CreateView
+from django.views.generic import TemplateView, View, FormView, ListView, CreateView, DetailView
 from django.contrib import messages
 from django import forms 
 from divine_app.forms import FeedBackForm, LoginForm, Service, AppointmentForm, ContactForm, NewsletterForm, SignupForm, OTPForm    
 from django.http import JsonResponse, HttpResponseNotAllowed
-from divine_app.models import UserProfile, Appointment, Newsletter, FeedBack
+from divine_app.models import Category, UserProfile, Appointment, Newsletter, FeedBack, Product
 
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
@@ -166,6 +166,32 @@ class ServiceView(ListView):
     
 class PriceView(TemplateView):
     template_name = 'divine/price.html'
+
+
+class ProductListView(ListView):
+    model = Product
+    template_name = 'divine/products.html'
+    context_object_name = 'products'
+
+    def get_queryset(self):
+        category_name = self.request.GET.get('category')
+        if category_name:
+            return Product.objects.filter(category__name=category_name)
+        return Product.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = Category.objects.all()
+        return context
+
+
+class ProductDetailView(DetailView):
+    model = Product
+    template_name = 'divine/product_detail.html'
+    context_object_name = 'product'
+    slug_field = 'slug'
+    slug_url_kwarg = 'slug'
+
 
 class GalleryView(TemplateView):
     template_name = 'divine/gallery.html' 
