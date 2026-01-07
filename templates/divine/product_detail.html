@@ -1,8 +1,96 @@
+{% extends 'divine/base.html' %}
+{% load static %}
+
 {% block content %}
 
-<h2>{{ product.name }}</h2>
-<img src="{{ product.image.url }}" width="300">
-<p>{{ product.description }}</p>
-<h3>Rs. {{ product.price }}</h3>
+<div class="product-page">
 
-{% endblock content %}
+    <!-- LEFT IMAGE -->
+    <div class="product-left">
+        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="product-right">
+
+        <!-- PRODUCT INFO CARD -->
+        <div class="card product-info-card">
+            <div class="info-content">
+                <h2>{{ product.name }}</h2>
+                <p class="description">{{ product.description|linebreaks }}</p>
+            </div>
+
+            <p class="price">Rs. {{ product.price }}</p>
+        </div>
+
+        <div class="card action-card">
+            <button class="btn primary">Add to Cart</button>
+            <button class="btn outline">Add to Wishlist</button>
+            <button class="btn buy">Buy Now</button>
+        </div>
+
+    </div>
+</div>
+
+<!-- REVIEWS CARD -->
+<div class="card reviews-card">
+
+    <h3>Reviews</h3>
+    <span>({{reviews.count}} reviews)</span>
+
+
+    {% if user.is_authenticated %}
+    <form method="POST" action="{% url 'submit_review' product.id %}" class="review-form">
+        {% csrf_token %}
+
+        <div class="star-rating">
+            {% for i in "54321" %}
+            <input type="radio" name="rating" value="{{ i }}" id="star{{ i }}">
+            <label for="star{{ i }}">★</label>
+            {% endfor %}
+        </div>
+
+        <textarea name="message" placeholder="Write your review..." required></textarea>
+        <button type="submit" class="btn primary">Submit Review</button>
+    </form>
+    {% else %}
+    <p><a href="{% url 'login' %}">Login</a> to write a review.</p>
+    {% endif %}
+
+    <hr>
+
+    <!-- REVIEWS LIST -->
+    <div id="review-list">
+        {% for review in reviews %}
+        <div class="review-item">
+            <img src="{{ review.user.userprofile.image.url }}">
+            <div>
+                <strong>{{ review.user.userprofile.username }}</strong>
+                <div class="stars">
+                    {% for i in "12345" %}
+                        {% if forloop.counter <= review.rating %}★{% else %}☆{% endif %}
+                    {% endfor %}
+                </div>
+                <p>{{ review.message }}</p>
+                <small>{{ review.created_at|date:"M d, Y" }}</small>
+            </div>
+            {% comment %} {% empty %}
+                <p>No reviews yet.</p>
+            {% endfor %} {% endcomment %}
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if total_reviews > 5 %}
+    <button
+        id="load-more"
+        class="btn outline full"
+        data-url="{% url 'load_more_reviews' product.id %}"
+        data-offset="5"
+    >
+        See more
+    </button>    
+    {% endif %}
+</div>
+
+{% endblock %}

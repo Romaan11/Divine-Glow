@@ -353,7 +353,45 @@ document.querySelectorAll('.error-icon').forEach(function (icon) {
     });
 });
 
-// Feedback Form
+
+//Product Detail
+let offset = 5;
+const btn = document.getElementById('load-more');
+
+btn?.addEventListener('click', () => {
+    let offset = parseInt(btn.dataset.offset);
+    const url = btn.dataset.url;
+
+    fetch(`${url}?offset=${offset}`)
+        .then(res => res.json())
+        .then(data => {
+
+            data.reviews.forEach(r => {
+                document.getElementById('review-list').insertAdjacentHTML(
+                    'beforeend',
+                    `
+                    <div class="review-item">
+                        <img src="${r.image}">
+                        <div>
+                            <strong>${r.username}</strong>
+                            <div class="stars">
+                                ${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}
+                            </div>
+                            <p>${r.message}</p>
+                        </div>
+                    </div>
+                    `
+                );
+            });
+
+            btn.dataset.offset = data.loaded_count;
+
+            if (!data.has_more || data.reviews.length === 0) {
+                btn.style.display = 'none';
+            }
+        });
+});
+
 
 
 // Newsletter AJAX form submission 

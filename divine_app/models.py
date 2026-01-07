@@ -5,6 +5,7 @@ from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils.text import slugify
+from django.utils.translation import gettext_lazy as _
 
 class TimeStampModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
@@ -18,6 +19,12 @@ class UserProfile(models.Model):
     username = models.CharField(max_length=150, unique=True)
     email = models.EmailField(unique=True)  
     phone = models.CharField(max_length=10, unique=True) 
+    image = models.ImageField(
+        upload_to='profile_images/',
+        null=True,
+        blank=True,
+        default='static/img/default.jpg'
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -66,6 +73,20 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+    
+
+class Review(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    rating = models.IntegerField(choices=[(i, i) for i in range(1, 6)], verbose_name=_("Rating (1-5)"))
+    message = models.TextField(verbose_name=_("Review Message"))
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.user.username} - {self.rating}⭐"
 
 
 class Service(models.Model):

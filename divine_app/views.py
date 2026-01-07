@@ -4,7 +4,7 @@ from django.contrib import messages
 from django import forms 
 from divine_app.forms import FeedBackForm, LoginForm, Service, AppointmentForm, ContactForm, NewsletterForm, SignupForm, OTPForm    
 from django.http import JsonResponse, HttpResponseNotAllowed
-from divine_app.models import Category, UserProfile, Appointment, Newsletter, FeedBack, Product
+from divine_app.models import Category, Review, UserProfile, Appointment, Newsletter, FeedBack, Product
 
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
@@ -189,9 +189,63 @@ class ProductDetailView(DetailView):
     model = Product
     template_name = 'divine/product_detail.html'
     context_object_name = 'product'
-    slug_field = 'slug'
-    slug_url_kwarg = 'slug'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        total_reviews = self.object.reviews.count()
+        context['reviews'] = self.object.reviews.all()[:5]
+        context['total_reviews'] = min(total_reviews, 20)
+
+        return context
+
+
+class SubmitReviewView(View):
+    def post(self, request, pk):
+        product = get_object_or_404(Product, pk=pk)
+
+        if request.user.is_authenticated:
+            rating = request.POST.get('rating')
+            message = request.POST.get('message')
+
+            Review.objects.create(
+                product=product,
+                user=request.user,
+                rating=rating,
+                message=message
+            )
+
+        return redirect('product_detail', pk=pk)
+
+
+class LoadMoreReviewsView(View):
+    def get(self, request, pk):
+        offset = int(request.GET.get('offset', 0))
+        LIMIT = 5
+        MAX_REVIEWS = 20
+
+        total_reviews = Review.objects.filter(product_id=pk).count()
+
+        remaining_allowed = max(0, MAX_REVIEWS - offset)
+        load_count = min(LIMIT, remaining_allowed)
+
+        reviews = Review.objects.filter(product_id=pk)\
+            .order_by('-created_at')[offset:offset + load_count]
+
+        data = []
+        for review in reviews:
+            data.append({
+                'username': review.user.userprofile.username,
+                'image': review.user.userprofile.image.url,
+                'rating': review.rating,
+                'message': review.message,
+            })
+
+        return JsonResponse({
+            'reviews': data,
+            'loaded_count': offset + len(data),
+            'total_reviews': min(total_reviews, MAX_REVIEWS),
+            'has_more': offset + len(data) < min(total_reviews, MAX_REVIEWS)
+        })
 
 class GalleryView(TemplateView):
     template_name = 'divine/gallery.html' 
